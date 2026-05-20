@@ -4,9 +4,10 @@ import Icon from "./Icon";
 
 export default function CommandBar() {
   return (
+    <div style={{ display: "flex", justifyContent: "center", marginTop: 28 }}>
     <div
       style={{
-        marginTop: 28,
+        width: "50%",
         border: "1.4px solid var(--stroke)",
         borderRadius: 14,
         padding: "14px 18px",
@@ -38,6 +39,7 @@ export default function CommandBar() {
       >
         ⌘ K
       </span>
+    </div>
     </div>
   );
 }
