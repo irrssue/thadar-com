@@ -72,6 +72,51 @@ export default function Icon({ name, size = 20 }: IconProps) {
           <path {...stroke} d="M12 4l1.6 4.4L18 10l-4.4 1.6L12 16l-1.6-4.4L6 10l4.4-1.6z" />
         </svg>
       );
+    case "flame":
+      return (
+        <svg width={s} height={s} viewBox="0 0 24 24">
+          <path {...stroke} d="M12 3c1 3 4 4.5 4 8a4 4 0 1 1-8 0c0-1.6.7-2.6 1.5-3.5C10.5 6.5 12 5.5 12 3z" />
+        </svg>
+      );
+    case "trophy":
+      return (
+        <svg width={s} height={s} viewBox="0 0 24 24">
+          <path {...stroke} d="M7 4h10v4a5 5 0 0 1-10 0z M5 5h2v2a2 2 0 0 1-2-2z M17 5h2a2 2 0 0 1-2 2z M9 20h6 M12 13v7" />
+        </svg>
+      );
+    case "trend":
+      return (
+        <svg width={s} height={s} viewBox="0 0 24 24">
+          <path {...stroke} d="M4 17l5-5 4 4 7-8 M15 8h5v5" />
+        </svg>
+      );
+    case "target":
+      return (
+        <svg width={s} height={s} viewBox="0 0 24 24">
+          <circle {...stroke} cx="12" cy="12" r="8" />
+          <circle {...stroke} cx="12" cy="12" r="4" />
+          <circle {...stroke} cx="12" cy="12" r="1" />
+        </svg>
+      );
+    case "book":
+      return (
+        <svg width={s} height={s} viewBox="0 0 24 24">
+          <path {...stroke} d="M5 4h10a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z M5 17a3 3 0 0 1 3-3h10" />
+        </svg>
+      );
+    case "check":
+      return (
+        <svg width={s} height={s} viewBox="0 0 24 24">
+          <path {...stroke} d="M4 12l5 5L20 6" />
+        </svg>
+      );
+    case "clock":
+      return (
+        <svg width={s} height={s} viewBox="0 0 24 24">
+          <circle {...stroke} cx="12" cy="12" r="8" />
+          <path {...stroke} d="M12 7v5l3 2" />
+        </svg>
+      );
     default:
       return null;
   }
