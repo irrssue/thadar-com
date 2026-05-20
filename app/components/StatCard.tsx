@@ -12,12 +12,12 @@ export default function StatCard({ label, value, hint, accent }: StatCardProps) 
     <div
       style={{
         border: "1px solid var(--ink-faint)",
-        borderRadius: 14,
+        borderRadius: 10,
         background: "var(--surface)",
-        padding: "18px 20px",
+        padding: "12px 14px",
         display: "flex",
         flexDirection: "column",
-        gap: 6,
+        gap: 4,
       }}
     >
       <div
@@ -33,7 +33,7 @@ export default function StatCard({ label, value, hint, accent }: StatCardProps) 
       </div>
       <div
         style={{
-          fontSize: 32,
+          fontSize: 20,
           fontWeight: 600,
           letterSpacing: "-0.5px",
           color: accent ? "var(--accent)" : "var(--ink)",

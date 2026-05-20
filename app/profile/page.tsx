@@ -50,31 +50,31 @@ export default function ProfilePage() {
     <>
       <div
         style={{
-          maxWidth: 1240,
+          maxWidth: 860,
           margin: "0 auto",
-          padding: "40px 56px 160px",
+          padding: "24px 34px 100px",
         }}
       >
         <div
           style={{
             display: "flex",
             alignItems: "flex-end",
-            gap: 22,
-            marginBottom: 8,
+            gap: 14,
+            marginBottom: 6,
             flexWrap: "wrap",
           }}
         >
           <div
             style={{
-              width: 92,
-              height: 92,
+              width: 56,
+              height: 56,
               borderRadius: "50%",
               background: "linear-gradient(135deg, var(--avatar-grad-from), var(--avatar-grad-to))",
               border: "1px solid var(--accent)",
               display: "inline-flex",
               alignItems: "center",
               justifyContent: "center",
-              fontSize: 36,
+              fontSize: 22,
               fontWeight: 600,
               color: "var(--accent)",
               letterSpacing: "-0.5px",
@@ -87,8 +87,8 @@ export default function ProfilePage() {
             <h1
               style={{
                 fontWeight: 600,
-                fontSize: 48,
-                margin: "0 0 4px",
+                fontSize: 28,
+                margin: "0 0 2px",
                 letterSpacing: "-0.5px",
               }}
             >
@@ -97,7 +97,7 @@ export default function ProfilePage() {
             <p
               style={{
                 color: "var(--ink-dim)",
-                fontSize: 16,
+                fontSize: 13,
                 margin: 0,
                 fontWeight: 400,
               }}
@@ -111,8 +111,8 @@ export default function ProfilePage() {
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(4, 1fr)",
-            gap: 16,
-            margin: "28px 0",
+            gap: 10,
+            margin: "16px 0",
           }}
           className="profile-stats"
         >
@@ -126,14 +126,14 @@ export default function ProfilePage() {
           style={{
             display: "grid",
             gridTemplateColumns: "1.4fr 1fr",
-            gap: 22,
-            marginBottom: 22,
+            gap: 14,
+            marginBottom: 14,
           }}
           className="profile-grid"
         >
           <SubjectBarChart data={SUBJECTS} />
 
-          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             <FocusCard
               title="Acing"
               accent="var(--accent)"
@@ -151,7 +151,7 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        <div style={{ marginBottom: 22 }}>
+        <div style={{ marginBottom: 14 }}>
           <ActivityHeatmap weeks={14} data={activity} />
         </div>
 
@@ -161,12 +161,12 @@ export default function ProfilePage() {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "baseline",
-              marginBottom: 14,
+              marginBottom: 10,
             }}
           >
             <h2
               style={{
-                fontSize: 20,
+                fontSize: 14,
                 fontWeight: 600,
                 letterSpacing: "-0.2px",
                 margin: 0,
@@ -188,7 +188,7 @@ export default function ProfilePage() {
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(3, 1fr)",
-              gap: 14,
+              gap: 8,
             }}
             className="achievements-grid"
           >
@@ -236,9 +236,9 @@ function FocusCard({ title, accent, icon, items, empty }: FocusCardProps) {
     <div
       style={{
         border: "1px solid var(--ink-faint)",
-        borderRadius: 14,
+        borderRadius: 10,
         background: "var(--surface)",
-        padding: "18px 20px",
+        padding: "12px 14px",
         flex: 1,
       }}
     >
@@ -246,8 +246,8 @@ function FocusCard({ title, accent, icon, items, empty }: FocusCardProps) {
         style={{
           display: "flex",
           alignItems: "center",
-          gap: 8,
-          marginBottom: 12,
+          gap: 6,
+          marginBottom: 8,
           color: accent,
         }}
       >

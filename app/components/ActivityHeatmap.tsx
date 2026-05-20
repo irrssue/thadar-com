@@ -21,9 +21,9 @@ export default function ActivityHeatmap({ weeks = 14, data }: ActivityHeatmapPro
     <div
       style={{
         border: "1px solid var(--ink-faint)",
-        borderRadius: 14,
+        borderRadius: 10,
         background: "var(--surface)",
-        padding: "20px 22px",
+        padding: "14px 16px",
       }}
     >
       <div
@@ -31,11 +31,11 @@ export default function ActivityHeatmap({ weeks = 14, data }: ActivityHeatmapPro
           display: "flex",
           justifyContent: "space-between",
           alignItems: "baseline",
-          marginBottom: 16,
+          marginBottom: 10,
         }}
       >
         <div>
-          <div style={{ fontSize: 18, fontWeight: 600, letterSpacing: "-0.2px" }}>
+          <div style={{ fontSize: 13, fontWeight: 600, letterSpacing: "-0.2px" }}>
             Activity
           </div>
           <div
@@ -82,7 +82,7 @@ export default function ActivityHeatmap({ weeks = 14, data }: ActivityHeatmapPro
           gridTemplateColumns: `repeat(${weeks}, 1fr)`,
           gridAutoFlow: "column",
           gridTemplateRows: "repeat(7, 1fr)",
-          gap: 4,
+          gap: 3,
         }}
       >
         {cells.map((v, i) => (
@@ -91,7 +91,7 @@ export default function ActivityHeatmap({ weeks = 14, data }: ActivityHeatmapPro
             title={`${v} min`}
             style={{
               aspectRatio: "1 / 1",
-              borderRadius: 3,
+              borderRadius: 2,
               background: shade(v),
               border: "1px solid var(--hairline)",
             }}

@@ -20,19 +20,19 @@ export default function AchievementBadge({ data }: AchievementBadgeProps) {
     <div
       style={{
         border: "1px solid var(--ink-faint)",
-        borderRadius: 12,
+        borderRadius: 8,
         background: "var(--surface)",
-        padding: "14px 16px",
+        padding: "9px 11px",
         display: "flex",
-        gap: 12,
+        gap: 8,
         alignItems: "center",
         opacity: earned ? 1 : 0.45,
       }}
     >
       <div
         style={{
-          width: 40,
-          height: 40,
+          width: 28,
+          height: 28,
           borderRadius: 999,
           display: "inline-flex",
           alignItems: "center",
@@ -43,13 +43,13 @@ export default function AchievementBadge({ data }: AchievementBadgeProps) {
           flexShrink: 0,
         }}
       >
-        <Icon name={data.icon} size={18} />
+        <Icon name={data.icon} size={12} />
       </div>
       <div style={{ minWidth: 0 }}>
-        <div style={{ fontSize: 14, fontWeight: 500, color: "var(--ink)" }}>
+        <div style={{ fontSize: 12, fontWeight: 500, color: "var(--ink)" }}>
           {data.title}
         </div>
-        <div style={{ fontSize: 12, color: "var(--ink-dim)" }}>{data.detail}</div>
+        <div style={{ fontSize: 11, color: "var(--ink-dim)" }}>{data.detail}</div>
       </div>
     </div>
   );

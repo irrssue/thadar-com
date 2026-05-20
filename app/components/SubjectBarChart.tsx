@@ -25,9 +25,9 @@ export default function SubjectBarChart({ data }: SubjectBarChartProps) {
     <div
       style={{
         border: "1px solid var(--ink-faint)",
-        borderRadius: 14,
+        borderRadius: 10,
         background: "var(--surface)",
-        padding: "20px 22px",
+        padding: "14px 16px",
       }}
     >
       <div
@@ -35,11 +35,11 @@ export default function SubjectBarChart({ data }: SubjectBarChartProps) {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "baseline",
-          marginBottom: 18,
+          marginBottom: 12,
         }}
       >
         <div>
-          <div style={{ fontSize: 18, fontWeight: 600, letterSpacing: "-0.2px" }}>
+          <div style={{ fontSize: 13, fontWeight: 600, letterSpacing: "-0.2px" }}>
             Mastery by subject
           </div>
           <div
@@ -87,7 +87,7 @@ export default function SubjectBarChart({ data }: SubjectBarChartProps) {
         </div>
       </div>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
         {sorted.map((s) => {
           const c = colorFor(s.score);
           const deltaPositive = s.delta >= 0;
