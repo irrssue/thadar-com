@@ -27,6 +27,7 @@ body {
   background: var(--bg);
   color: var(--ink);
   min-height: 100vh;
+  font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.05) 1px, transparent 0);
   background-size: 22px 22px;
 }

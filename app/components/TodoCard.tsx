@@ -31,7 +31,6 @@ const tabStyle = {
   gap: 6,
   background: "transparent",
   cursor: "pointer",
-  fontFamily: "var(--font-kalam)",
 };
 
 export default function TodoCard({ count }: TodoCardProps) {
@@ -42,46 +41,29 @@ export default function TodoCard({ count }: TodoCardProps) {
     <div
       style={{
         position: "relative",
-        border: "1.5px dashed var(--stroke)",
+        border: "1px solid var(--ink-faint)",
         borderRadius: 14,
         background: "rgba(255,255,255,0.012)",
         padding: "18px 20px",
       }}
     >
-      <span
-        style={{
-          position: "absolute",
-          top: -12,
-          left: 18,
-          background: "var(--bg)",
-          padding: "0 8px",
-          fontFamily: "var(--font-mono)",
-          fontSize: 11,
-          letterSpacing: 1,
-          textTransform: "uppercase",
-          color: "var(--ink-dim)",
-        }}
-      >
-        todo
-      </span>
-
       <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between" }}>
-        <div style={{ fontSize: 22, fontWeight: 700, fontFamily: "var(--font-kalam)" }}>
+        <div style={{ fontSize: 20, fontWeight: 600 }}>
           Today &amp; this week
         </div>
-        <span style={{ fontFamily: "var(--font-kalam)", color: "var(--ink-dim)", fontSize: 15, fontWeight: 300 }}>
+        <span style={{ color: "var(--ink-dim)", fontSize: 14 }}>
           {openCount} open
         </span>
       </div>
 
-      <div style={{ display: "flex", gap: 8, marginTop: 6 }}>
+      <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
         <button style={{ ...tabStyle, borderColor: "var(--accent)", color: "var(--accent)" }}>All</button>
         <button style={tabStyle}>Due today</button>
         <button style={tabStyle}>Overdue</button>
         <button style={tabStyle}>Done</button>
       </div>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 10 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 14 }}>
         {items.map((t, i) => (
           <div
             key={i}
@@ -90,7 +72,7 @@ export default function TodoCard({ count }: TodoCardProps) {
               alignItems: "center",
               gap: 12,
               padding: "10px 12px",
-              border: "1.2px dashed var(--ink-faint)",
+              border: "1px solid var(--ink-faint)",
               borderRadius: 10,
               opacity: t.done ? 0.6 : 1,
             }}
@@ -108,8 +90,7 @@ export default function TodoCard({ count }: TodoCardProps) {
             <div style={{ display: "flex", flexDirection: "column", gap: 2, minWidth: 0 }}>
               <div
                 style={{
-                  fontSize: 17,
-                  fontFamily: "var(--font-kalam)",
+                  fontSize: 15,
                   color: t.done ? "var(--ink-faint)" : "var(--ink)",
                   textDecoration: t.done ? "line-through" : "none",
                 }}
@@ -120,7 +101,6 @@ export default function TodoCard({ count }: TodoCardProps) {
                 style={{
                   fontSize: 12,
                   color: "var(--ink-dim)",
-                  fontFamily: "var(--font-mono)",
                 }}
               >
                 {t.from}
@@ -142,3 +122,5 @@ export default function TodoCard({ count }: TodoCardProps) {
     </div>
   );
 }
+</content>
+</invoke>

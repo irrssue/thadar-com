@@ -20,9 +20,8 @@ export default function CommandBar() {
       <span
         style={{
           color: "var(--ink-faint)",
-          fontSize: 16,
+          fontSize: 15,
           flex: 1,
-          fontFamily: "var(--font-kalam)",
         }}
       >
         Jump to a class, assignment, or person…

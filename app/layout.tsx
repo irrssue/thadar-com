@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
-import { Kalam, JetBrains_Mono } from "next/font/google";
+import { Geist, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const kalam = Kalam({
-  weight: ["300", "400", "700"],
+const geist = Geist({
   subsets: ["latin"],
-  variable: "--font-kalam",
+  variable: "--font-sans",
   display: "swap",
 });
 
@@ -27,8 +26,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${kalam.variable} ${jetbrainsMono.variable}`}>
+    <html lang="en" className={`${geist.variable} ${jetbrainsMono.variable}`}>
       <body>{children}</body>
     </html>
   );
 }
+</content>
+</invoke>

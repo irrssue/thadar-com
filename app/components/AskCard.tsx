@@ -7,7 +7,7 @@ export default function AskCard() {
     <div
       style={{
         position: "relative",
-        border: "1.5px dashed var(--stroke)",
+        border: "1px solid var(--ink-faint)",
         borderRadius: 14,
         background: "rgba(255,255,255,0.012)",
         padding: "18px 20px",
@@ -15,29 +15,11 @@ export default function AskCard() {
         flexDirection: "column",
       }}
     >
-      <span
-        style={{
-          position: "absolute",
-          top: -12,
-          left: 18,
-          background: "var(--bg)",
-          padding: "0 8px",
-          fontFamily: "var(--font-mono)",
-          fontSize: 11,
-          letterSpacing: 1,
-          textTransform: "uppercase",
-          color: "var(--ink-dim)",
-        }}
-      >
-        ask:
-      </span>
-
       <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between" }}>
         <div
           style={{
-            fontSize: 22,
-            fontWeight: 700,
-            fontFamily: "var(--font-kalam)",
+            fontSize: 20,
+            fontWeight: 600,
             display: "inline-flex",
             alignItems: "center",
             gap: 8,
@@ -47,27 +29,24 @@ export default function AskCard() {
         </div>
         <span
           style={{
-            fontFamily: "var(--font-kalam)",
             color: "var(--ink-dim)",
-            fontSize: 15,
-            fontWeight: 300,
+            fontSize: 14,
           }}
         >
           AI · context: your classes
         </span>
       </div>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 10, margin: "10px 0 14px", minHeight: 180 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 10, margin: "14px 0", minHeight: 180 }}>
         <div
           style={{
             maxWidth: "86%",
             padding: "10px 14px",
             borderRadius: 14,
-            border: "1.2px dashed var(--ink-faint)",
-            fontSize: 16,
-            lineHeight: 1.35,
+            border: "1px solid var(--ink-faint)",
+            fontSize: 15,
+            lineHeight: 1.45,
             alignSelf: "flex-start",
-            fontFamily: "var(--font-kalam)",
           }}
         >
           Hi Thazin — want help with the Algebra worksheet due today?
@@ -77,12 +56,11 @@ export default function AskCard() {
             maxWidth: "86%",
             padding: "10px 14px",
             borderRadius: 14,
-            border: "1.2px dashed rgba(224,185,122,0.4)",
+            border: "1px solid rgba(224,185,122,0.4)",
             background: "rgba(224,185,122,0.06)",
-            fontSize: 16,
-            lineHeight: 1.35,
+            fontSize: 15,
+            lineHeight: 1.45,
             alignSelf: "flex-end",
-            fontFamily: "var(--font-kalam)",
           }}
         >
           explain factoring trinomials again, simpler
@@ -92,11 +70,10 @@ export default function AskCard() {
             maxWidth: "86%",
             padding: "10px 14px",
             borderRadius: 14,
-            border: "1.2px dashed var(--ink-faint)",
-            fontSize: 16,
-            lineHeight: 1.35,
+            border: "1px solid var(--ink-faint)",
+            fontSize: 15,
+            lineHeight: 1.45,
             alignSelf: "flex-start",
-            fontFamily: "var(--font-kalam)",
           }}
         >
           Sure. Think of it as un-FOIL-ing — find two numbers that <em>multiply</em> to the last
@@ -109,7 +86,7 @@ export default function AskCard() {
           display: "flex",
           gap: 8,
           alignItems: "center",
-          border: "1.4px solid var(--stroke)",
+          border: "1px solid var(--stroke)",
           borderRadius: 12,
           padding: "10px 12px",
           background: "rgba(255,255,255,0.02)",
@@ -120,8 +97,7 @@ export default function AskCard() {
           style={{
             color: "var(--ink-faint)",
             flex: 1,
-            fontSize: 16,
-            fontFamily: "var(--font-kalam)",
+            fontSize: 15,
           }}
         >
           Ask anything — homework, schedule, study tips…
@@ -131,7 +107,7 @@ export default function AskCard() {
             width: 30,
             height: 30,
             borderRadius: 8,
-            border: "1.2px solid var(--ink-faint)",
+            border: "1px solid var(--ink-faint)",
             display: "inline-flex",
             alignItems: "center",
             justifyContent: "center",
@@ -147,14 +123,13 @@ export default function AskCard() {
           <span
             key={label}
             style={{
-              border: "1.2px solid var(--ink-faint)",
+              border: "1px solid var(--ink-faint)",
               borderRadius: 999,
               padding: "4px 10px",
               color: "var(--ink-dim)",
               fontSize: 13,
               display: "inline-flex",
               alignItems: "center",
-              fontFamily: "var(--font-kalam)",
               cursor: "pointer",
             }}
           >
@@ -165,3 +140,5 @@ export default function AskCard() {
     </div>
   );
 }
+</content>
+</invoke>
