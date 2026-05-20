@@ -3,13 +3,14 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Icon from "./Icon";
+import { useTheme } from "./ThemeProvider";
 
 const NAV_ITEMS = [
   { id: "home", label: "Home", href: "/" },
   { id: "classes", label: "Classes", href: "/classes" },
   { id: "profile", label: "Profile", href: "/profile" },
   { id: "inbox", label: "Inbox", href: "/inbox" },
-  { id: "moon", label: "Theme", href: "#theme" },
+  { id: "theme", label: "Theme", href: "#theme" },
 ];
 
 interface FloatingNavProps {
@@ -19,6 +20,7 @@ interface FloatingNavProps {
 
 export default function FloatingNav({ active, onChange }: FloatingNavProps) {
   const pathname = usePathname();
+  const { theme, toggle } = useTheme();
   const currentId =
     active ??
     NAV_ITEMS.find((i) =>
@@ -45,37 +47,43 @@ export default function FloatingNav({ active, onChange }: FloatingNavProps) {
           display: "flex",
           alignItems: "center",
           gap: 4,
-          background: "#1a1a1d",
-          border: "1px solid #26262a",
+          background: "var(--nav-bg)",
+          border: "1px solid var(--nav-border)",
           borderRadius: 999,
           padding: 8,
-          boxShadow: "0 14px 40px rgba(0,0,0,0.55), 0 2px 0 rgba(255,255,255,0.04) inset",
+          boxShadow: "var(--nav-shadow)",
         }}
         aria-label="Primary"
       >
         {NAV_ITEMS.map((item) => {
           const isActive = currentId === item.id;
-          const isTheme = item.id === "moon";
+          const isTheme = item.id === "theme";
+          const iconName = isTheme ? (theme === "dark" ? "sun" : "moon") : item.id;
+          const label = isTheme
+            ? theme === "dark"
+              ? "Switch to light"
+              : "Switch to dark"
+            : item.label;
           const sharedStyle = {
             width: 42,
             height: 42,
             borderRadius: 999,
             border: "none",
-            background: isActive ? "#2a2a2f" : "transparent",
+            background: isActive ? "var(--nav-active)" : "transparent",
             color: isActive ? "var(--ink)" : "var(--ink-dim)",
             display: "inline-flex",
             alignItems: "center",
             justifyContent: "center",
             cursor: "pointer",
             position: "relative",
-            boxShadow: isActive ? "0 0 0 1px rgba(255,255,255,0.06) inset" : "none",
+            boxShadow: isActive ? "0 0 0 1px var(--nav-active-inset) inset" : "none",
             transition: "background 120ms, color 120ms",
             textDecoration: "none",
           } as const;
 
           const inner = (
             <>
-              <Icon name={item.id} />
+              <Icon name={iconName} />
               {isActive && (
                 <span
                   style={{
@@ -96,8 +104,8 @@ export default function FloatingNav({ active, onChange }: FloatingNavProps) {
                   bottom: 56,
                   left: "50%",
                   transform: "translateX(-50%)",
-                  background: "#1a1a1d",
-                  border: "1px solid #26262a",
+                  background: "var(--nav-bg)",
+                  border: "1px solid var(--nav-border)",
                   color: "var(--ink)",
                   fontFamily: "var(--font-mono)",
                   fontSize: 11,
@@ -110,7 +118,7 @@ export default function FloatingNav({ active, onChange }: FloatingNavProps) {
                 }}
                 className="nav-tip"
               >
-                {item.label}
+                {label}
               </span>
             </>
           );
@@ -119,8 +127,11 @@ export default function FloatingNav({ active, onChange }: FloatingNavProps) {
             return (
               <button
                 key={item.id}
-                onClick={() => onChange?.(item.id)}
-                aria-label={item.label}
+                onClick={() => {
+                  toggle();
+                  onChange?.(item.id);
+                }}
+                aria-label={label}
                 style={sharedStyle}
                 className="nav-btn"
               >
@@ -145,7 +156,7 @@ export default function FloatingNav({ active, onChange }: FloatingNavProps) {
         })}
       </nav>
       <style>{`
-        .nav-btn:hover { background: rgba(255,255,255,0.04) !important; color: var(--ink) !important; }
+        .nav-btn:hover { background: var(--surface-hover) !important; color: var(--ink) !important; }
         .nav-btn:hover .nav-tip { opacity: 1 !important; }
       `}</style>
     </div>

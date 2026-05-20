@@ -13,7 +13,7 @@ export default function StatCard({ label, value, hint, accent }: StatCardProps) 
       style={{
         border: "1px solid var(--ink-faint)",
         borderRadius: 14,
-        background: "rgba(255,255,255,0.012)",
+        background: "var(--surface)",
         padding: "18px 20px",
         display: "flex",
         flexDirection: "column",

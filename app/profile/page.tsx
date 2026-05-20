@@ -69,7 +69,7 @@ export default function ProfilePage() {
               width: 92,
               height: 92,
               borderRadius: "50%",
-              background: "linear-gradient(135deg, rgba(224,185,122,0.35), rgba(224,185,122,0.08))",
+              background: "linear-gradient(135deg, var(--avatar-grad-from), var(--avatar-grad-to))",
               border: "1px solid var(--accent)",
               display: "inline-flex",
               alignItems: "center",
@@ -237,7 +237,7 @@ function FocusCard({ title, accent, icon, items, empty }: FocusCardProps) {
       style={{
         border: "1px solid var(--ink-faint)",
         borderRadius: 14,
-        background: "rgba(255,255,255,0.012)",
+        background: "var(--surface)",
         padding: "18px 20px",
         flex: 1,
       }}
@@ -275,7 +275,7 @@ function FocusCard({ title, accent, icon, items, empty }: FocusCardProps) {
                 justifyContent: "space-between",
                 alignItems: "baseline",
                 paddingBottom: 6,
-                borderBottom: "1px solid rgba(255,255,255,0.04)",
+                borderBottom: "1px solid var(--hairline)",
               }}
             >
               <span style={{ fontSize: 14, color: "var(--ink)" }}>{it.label}</span>

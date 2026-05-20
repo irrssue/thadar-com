@@ -6,10 +6,10 @@ interface ActivityHeatmapProps {
 }
 
 function shade(v: number) {
-  if (v <= 0) return "rgba(255,255,255,0.04)";
-  if (v < 25) return "rgba(224,185,122,0.25)";
-  if (v < 50) return "rgba(224,185,122,0.45)";
-  if (v < 75) return "rgba(224,185,122,0.7)";
+  if (v <= 0) return "var(--heat-0)";
+  if (v < 25) return "var(--heat-1)";
+  if (v < 50) return "var(--heat-2)";
+  if (v < 75) return "var(--heat-3)";
   return "var(--accent)";
 }
 
@@ -22,7 +22,7 @@ export default function ActivityHeatmap({ weeks = 14, data }: ActivityHeatmapPro
       style={{
         border: "1px solid var(--ink-faint)",
         borderRadius: 14,
-        background: "rgba(255,255,255,0.012)",
+        background: "var(--surface)",
         padding: "20px 22px",
       }}
     >
@@ -68,7 +68,7 @@ export default function ActivityHeatmap({ weeks = 14, data }: ActivityHeatmapPro
                 height: 10,
                 borderRadius: 2,
                 background: shade(v),
-                border: "1px solid rgba(255,255,255,0.04)",
+                border: "1px solid var(--hairline)",
               }}
             />
           ))}
@@ -93,7 +93,7 @@ export default function ActivityHeatmap({ weeks = 14, data }: ActivityHeatmapPro
               aspectRatio: "1 / 1",
               borderRadius: 3,
               background: shade(v),
-              border: "1px solid rgba(255,255,255,0.04)",
+              border: "1px solid var(--hairline)",
             }}
           />
         ))}

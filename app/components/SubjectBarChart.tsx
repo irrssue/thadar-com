@@ -13,8 +13,8 @@ interface SubjectBarChartProps {
 
 function colorFor(score: number) {
   if (score >= 80) return "var(--accent)";
-  if (score >= 60) return "#cfcab8";
-  if (score >= 40) return "#8a8780";
+  if (score >= 60) return "var(--mid-tone)";
+  if (score >= 40) return "var(--ink-dim)";
   return "var(--danger)";
 }
 
@@ -26,7 +26,7 @@ export default function SubjectBarChart({ data }: SubjectBarChartProps) {
       style={{
         border: "1px solid var(--ink-faint)",
         borderRadius: 14,
-        background: "rgba(255,255,255,0.012)",
+        background: "var(--surface)",
         padding: "20px 22px",
       }}
     >

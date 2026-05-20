@@ -9,7 +9,7 @@ export default function AskCard() {
         position: "relative",
         border: "1px solid var(--ink-faint)",
         borderRadius: 14,
-        background: "rgba(255,255,255,0.012)",
+        background: "var(--surface)",
         padding: "18px 20px",
         display: "flex",
         flexDirection: "column",
@@ -56,8 +56,8 @@ export default function AskCard() {
             maxWidth: "86%",
             padding: "10px 14px",
             borderRadius: 14,
-            border: "1px solid rgba(224,185,122,0.4)",
-            background: "rgba(224,185,122,0.06)",
+            border: "1px solid var(--accent-ring)",
+            background: "var(--accent-tint)",
             fontSize: 15,
             lineHeight: 1.45,
             alignSelf: "flex-end",
@@ -89,7 +89,7 @@ export default function AskCard() {
           border: "1px solid var(--stroke)",
           borderRadius: 12,
           padding: "10px 12px",
-          background: "rgba(255,255,255,0.02)",
+          background: "var(--surface-2)",
         }}
       >
         <Icon name="spark" size={16} />
@@ -140,5 +140,3 @@ export default function AskCard() {
     </div>
   );
 }
-</content>
-</invoke>

@@ -21,7 +21,7 @@ export default function AchievementBadge({ data }: AchievementBadgeProps) {
       style={{
         border: "1px solid var(--ink-faint)",
         borderRadius: 12,
-        background: "rgba(255,255,255,0.012)",
+        background: "var(--surface)",
         padding: "14px 16px",
         display: "flex",
         gap: 12,
@@ -37,7 +37,7 @@ export default function AchievementBadge({ data }: AchievementBadgeProps) {
           display: "inline-flex",
           alignItems: "center",
           justifyContent: "center",
-          background: earned ? "rgba(224,185,122,0.12)" : "rgba(255,255,255,0.03)",
+          background: earned ? "var(--accent-soft)" : "var(--surface-2)",
           color: earned ? "var(--accent)" : "var(--ink-dim)",
           border: `1px solid ${earned ? "var(--accent)" : "var(--ink-faint)"}`,
           flexShrink: 0,

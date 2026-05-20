@@ -47,6 +47,13 @@ export default function Icon({ name, size = 20 }: IconProps) {
           <path {...stroke} d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" />
         </svg>
       );
+    case "sun":
+      return (
+        <svg width={s} height={s} viewBox="0 0 24 24">
+          <circle {...stroke} cx="12" cy="12" r="4" />
+          <path {...stroke} d="M12 2v2 M12 20v2 M2 12h2 M20 12h2 M4.9 4.9l1.4 1.4 M17.7 17.7l1.4 1.4 M4.9 19.1l1.4-1.4 M17.7 6.3l1.4-1.4" />
+        </svg>
+      );
     case "send":
       return (
         <svg width={s} height={s} viewBox="0 0 24 24">

@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
-:root {
+:root,
+[data-theme="dark"] {
   --bg: #0e0e10;
   --bg-2: #16161a;
   --ink: #e9e7e2;
@@ -9,6 +10,57 @@
   --stroke: #6a6864;
   --accent: #e0b97a;
   --danger: #d97a7a;
+  --surface: rgba(255, 255, 255, 0.012);
+  --surface-2: rgba(255, 255, 255, 0.02);
+  --surface-hover: rgba(255, 255, 255, 0.04);
+  --nav-bg: #1a1a1d;
+  --nav-border: #26262a;
+  --nav-active: #2a2a2f;
+  --nav-active-inset: rgba(255, 255, 255, 0.06);
+  --nav-shadow: 0 14px 40px rgba(0, 0, 0, 0.55), 0 2px 0 rgba(255, 255, 255, 0.04) inset;
+  --dot-grid: rgba(255, 255, 255, 0.05);
+  --hairline: rgba(255, 255, 255, 0.04);
+  --heat-0: rgba(255, 255, 255, 0.04);
+  --heat-1: rgba(224, 185, 122, 0.25);
+  --heat-2: rgba(224, 185, 122, 0.45);
+  --heat-3: rgba(224, 185, 122, 0.7);
+  --accent-soft: rgba(224, 185, 122, 0.12);
+  --accent-ring: rgba(224, 185, 122, 0.4);
+  --accent-tint: rgba(224, 185, 122, 0.06);
+  --avatar-grad-from: rgba(224, 185, 122, 0.35);
+  --avatar-grad-to: rgba(224, 185, 122, 0.08);
+  --mid-tone: #cfcab8;
+}
+
+[data-theme="light"] {
+  --bg: #f7f5f0;
+  --bg-2: #ffffff;
+  --ink: #1a1814;
+  --ink-dim: #6a6760;
+  --ink-faint: #c8c4ba;
+  --stroke: #8a8780;
+  --accent: #b8893d;
+  --danger: #c44a4a;
+  --surface: rgba(0, 0, 0, 0.02);
+  --surface-2: rgba(0, 0, 0, 0.025);
+  --surface-hover: rgba(0, 0, 0, 0.05);
+  --nav-bg: #ffffff;
+  --nav-border: #e3dfd5;
+  --nav-active: #ece7da;
+  --nav-active-inset: rgba(0, 0, 0, 0.06);
+  --nav-shadow: 0 14px 40px rgba(60, 50, 30, 0.18), 0 2px 0 rgba(0, 0, 0, 0.04) inset;
+  --dot-grid: rgba(0, 0, 0, 0.06);
+  --hairline: rgba(0, 0, 0, 0.06);
+  --heat-0: rgba(0, 0, 0, 0.05);
+  --heat-1: rgba(184, 137, 61, 0.22);
+  --heat-2: rgba(184, 137, 61, 0.45);
+  --heat-3: rgba(184, 137, 61, 0.7);
+  --accent-soft: rgba(184, 137, 61, 0.14);
+  --accent-ring: rgba(184, 137, 61, 0.5);
+  --accent-tint: rgba(184, 137, 61, 0.08);
+  --avatar-grad-from: rgba(184, 137, 61, 0.3);
+  --avatar-grad-to: rgba(184, 137, 61, 0.08);
+  --mid-tone: #8a7d5a;
 }
 
 @theme inline {
@@ -28,6 +80,7 @@ body {
   color: var(--ink);
   min-height: 100vh;
   font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.05) 1px, transparent 0);
+  background-image: radial-gradient(circle at 1px 1px, var(--dot-grid) 1px, transparent 0);
   background-size: 22px 22px;
+  transition: background-color 160ms, color 160ms;
 }

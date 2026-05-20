@@ -13,7 +13,7 @@ export default function CommandBar() {
         display: "flex",
         alignItems: "center",
         gap: 14,
-        background: "rgba(255,255,255,0.02)",
+        background: "var(--surface-2)",
       }}
     >
       <Icon name="search" />

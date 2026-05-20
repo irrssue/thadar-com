@@ -417,7 +417,7 @@ export default function InboxPage() {
       <FloatingNav active={activeTab} onChange={setActiveTab} />
 
       <style>{`
-        .mail-row:hover { background: rgba(255,255,255,0.025); }
+        .mail-row:hover { background: var(--surface-hover); }
         @media (max-width: 820px) {
           .mail-row {
             grid-template-columns: 24px 110px 1fr 52px !important;
