@@ -117,6 +117,30 @@ export default function Icon({ name, size = 20 }: IconProps) {
           <path {...stroke} d="M12 7v5l3 2" />
         </svg>
       );
+    case "star":
+      return (
+        <svg width={s} height={s} viewBox="0 0 24 24">
+          <path {...stroke} d="M12 4l2.5 5 5.5.8-4 3.9.9 5.5L12 16.5 7.1 19.2 8 13.7 4 9.8 9.5 9z" />
+        </svg>
+      );
+    case "star-fill":
+      return (
+        <svg width={s} height={s} viewBox="0 0 24 24">
+          <path
+            fill="currentColor"
+            stroke="currentColor"
+            strokeWidth={1.2}
+            strokeLinejoin="round"
+            d="M12 4l2.5 5 5.5.8-4 3.9.9 5.5L12 16.5 7.1 19.2 8 13.7 4 9.8 9.5 9z"
+          />
+        </svg>
+      );
+    case "edit":
+      return (
+        <svg width={s} height={s} viewBox="0 0 24 24">
+          <path {...stroke} d="M4 20h4l10-10-4-4L4 16z M14 6l4 4" />
+        </svg>
+      );
     default:
       return null;
   }
