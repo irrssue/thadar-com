@@ -81,6 +81,26 @@ export default function AskCard() {
         </div>
       </div>
 
+      <div style={{ display: "flex", gap: 8, marginBottom: 8, flexWrap: "wrap" }}>
+        {["＋ Summarise Ch. 7", "＋ Quiz me on vocab", "＋ Plan my week"].map((label) => (
+          <span
+            key={label}
+            style={{
+              border: "1px solid var(--ink-faint)",
+              borderRadius: 999,
+              padding: "4px 10px",
+              color: "var(--ink-dim)",
+              fontSize: 13,
+              display: "inline-flex",
+              alignItems: "center",
+              cursor: "pointer",
+            }}
+          >
+            {label}
+          </span>
+        ))}
+      </div>
+
       <div
         style={{
           display: "flex",
@@ -116,26 +136,6 @@ export default function AskCard() {
         >
           <Icon name="send" size={16} />
         </span>
-      </div>
-
-      <div style={{ display: "flex", gap: 8, marginTop: 12, flexWrap: "wrap" }}>
-        {["＋ Summarise Ch. 7", "＋ Quiz me on vocab", "＋ Plan my week"].map((label) => (
-          <span
-            key={label}
-            style={{
-              border: "1px solid var(--ink-faint)",
-              borderRadius: 999,
-              padding: "4px 10px",
-              color: "var(--ink-dim)",
-              fontSize: 13,
-              display: "inline-flex",
-              alignItems: "center",
-              cursor: "pointer",
-            }}
-          >
-            {label}
-          </span>
-        ))}
       </div>
     </div>
   );
