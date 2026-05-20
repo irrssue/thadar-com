@@ -1,65 +1,119 @@
-import Image from "next/image";
+"use client";
+
+import { useState } from "react";
+import FloatingNav from "./components/FloatingNav";
+import TodoCard from "./components/TodoCard";
+import AskCard from "./components/AskCard";
+import CommandBar from "./components/CommandBar";
 
 export default function Home() {
+  const [activeTab, setActiveTab] = useState("home");
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <>
+      <div
+        style={{
+          maxWidth: 1240,
+          margin: "0 auto",
+          padding: "40px 56px 160px",
+        }}
+      >
+        <span
+          style={{
+            fontFamily: "var(--font-mono)",
+            fontSize: 11,
+            color: "var(--ink-faint)",
+            letterSpacing: 1,
+            textTransform: "uppercase",
+            border: "1px solid var(--ink-faint)",
+            borderRadius: 4,
+            padding: "4px 8px",
+            display: "inline-block",
+            transform: "rotate(-2deg)",
+          }}
+        >
+          wireframe · v1 · dark
+        </span>
+
+        <h1
+          style={{
+            fontFamily: "var(--font-kalam)",
+            fontWeight: 700,
+            fontSize: 56,
+            margin: "16px 0 4px",
+            letterSpacing: "-0.5px",
+          }}
+        >
+          Welcome,{" "}
+          <span style={{ color: "var(--accent)" }}>Thazin</span>
+        </h1>
+
+        <p
+          style={{
+            color: "var(--ink-dim)",
+            fontSize: 18,
+            margin: "0 0 28px",
+            fontWeight: 300,
+            fontFamily: "var(--font-kalam)",
+          }}
+        >
+          Tuesday · 3 things due today · 1 message from Ms. Patel
+        </p>
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1.6fr",
+            gap: 28,
+          }}
+          className="main-grid"
+        >
+          <TodoCard count={5} />
+          <AskCard />
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+
+        <CommandBar />
+
+        <div
+          style={{
+            display: "flex",
+            gap: 24,
+            alignItems: "center",
+            marginTop: 36,
+            color: "var(--ink-faint)",
+            fontFamily: "var(--font-mono)",
+            fontSize: 11,
+            letterSpacing: 1,
+            textTransform: "uppercase",
+          }}
+        >
+          <span>
+            <span
+              style={{
+                width: 8,
+                height: 8,
+                borderRadius: 999,
+                background: "var(--accent)",
+                display: "inline-block",
+                marginRight: 6,
+              }}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            active nav
+          </span>
+          <span>— — dashed = placeholder area</span>
+          <span>solid = real component (next iteration)</span>
         </div>
-      </main>
-    </div>
+      </div>
+
+      <FloatingNav active={activeTab} onChange={setActiveTab} />
+
+      <style>{`
+        @media (max-width: 880px) {
+          .main-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
+    </>
   );
 }
