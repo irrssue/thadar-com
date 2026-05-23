@@ -2,6 +2,8 @@
 
 # Thadar — Claude Code Reference
 
+> Next.js 15 App Router with `app/` at repo root (no `src/` directory).
+
 ## Project Overview
 Thadar (meaning "generous/giving" in Burmese) is an all-in-one EdTech teaching platform. Initially built for a single student in Myanmar, with plans to expand publicly. Domain: thadar.com
 
@@ -40,12 +42,11 @@ Thadar (meaning "generous/giving" in Burmese) is an all-in-one EdTech teaching p
 
 ## Project Structure (follow strictly)
 ```
-src/
-  app/          → Next.js App Router pages and layouts
-  components/   → Reusable UI components
-  lib/          → Utilities, helpers, shared logic
-  server/       → Server-only logic (Prisma client, auth config)
-  types/        → Shared TypeScript types and interfaces
+app/            → Next.js App Router pages and layouts
+components/     → Reusable UI components
+lib/            → Utilities, helpers, shared logic
+server/         → Server-only logic (Prisma client, auth config)
+types/          → Shared TypeScript types and interfaces
 prisma/
   schema.prisma → Single source of truth for DB schema
 public/         → Static assets only
