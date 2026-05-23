@@ -42,6 +42,8 @@ jobs:
           git pull --ff-only origin main
           rm -rf node_modules .next
           npm ci --prefer-offline
+          npx prisma generate
+          npx prisma migrate deploy
           npm run build
           pm2 restart thadar --update-env
           echo "deployed: $(git rev-parse --short HEAD)"
