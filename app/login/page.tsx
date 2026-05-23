@@ -28,6 +28,7 @@ function LoginPageInner() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
 
   const isRegister = mode === "register";
 
@@ -62,6 +63,11 @@ function LoginPageInner() {
         return;
       }
 
+      if (isRegister) {
+        setToast("Account created successfully!");
+        await new Promise((r) => setTimeout(r, 1500));
+      }
+
       router.push(callbackUrl);
       router.refresh();
     } catch {
@@ -81,6 +87,43 @@ function LoginPageInner() {
         padding: "40px 24px",
       }}
     >
+      {toast && (
+        <div
+          role="status"
+          aria-live="polite"
+          style={{
+            position: "fixed",
+            inset: 0,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 9999,
+            pointerEvents: "none",
+          }}
+        >
+          <div
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 10,
+              padding: "14px 20px",
+              borderRadius: 14,
+              background: "var(--surface)",
+              border: "1px solid var(--accent-ring)",
+              boxShadow: "0 8px 32px rgba(0,0,0,0.18)",
+              color: "var(--ink)",
+              fontSize: 15,
+              fontWeight: 500,
+              letterSpacing: "-0.1px",
+              animation: "fadeInScale 200ms ease",
+            }}
+          >
+            <span style={{ color: "var(--accent)", fontSize: 18 }}>✓</span>
+            {toast}
+          </div>
+        </div>
+      )}
+
       <div
         style={{
           width: "100%",
