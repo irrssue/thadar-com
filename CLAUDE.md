@@ -97,7 +97,10 @@ After every meaningful change, Claude Code must:
    docs(claude): update CLAUDE.md with Phase 1 completion notes
    ```
 
-3. Push to the current branch on GitHub immediately after committing. Never batch multiple unrelated changes into one commit.
+3. Commit and push to `main` on GitHub **immediately** after every change — no exceptions, no batching.
+   - Always push directly to `main`: `git push origin main`
+   - Never wait or defer the push. Change → commit → push. That is the full cycle.
+   - Never batch multiple unrelated changes into one commit.
 
 ## Environment Variables (never hardcode these)
 ```

@@ -1,36 +1,72 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Thadar
 
-## Getting Started
+An all-in-one EdTech teaching platform. Live at [thadar.com](https://thadar.com).
 
-First, run the development server:
+## Stack
+
+- **Framework:** Next.js 15 (App Router)
+- **Language:** TypeScript
+- **Styling:** Tailwind CSS
+- **Auth:** Auth.js
+- **ORM:** Prisma
+- **Database:** PostgreSQL (self-hosted, Docker)
+- **Storage:** MinIO (self-hosted, S3-compatible)
+- **Cache/Sessions:** Redis
+- **Email:** Resend
+- **Monitoring:** Sentry
+
+## Infrastructure
+
+Self-hosted on a home server cluster (3 Dell nodes, wired Ethernet).
+
+- App, DB, and storage each run in Docker containers
+- Network exposed via **Cloudflare Tunnel** → thadar.com
+- Backups to Cloudflare R2
+
+## Development
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Copy `.env.example` to `.env.local` and fill in all required variables before running.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Environment Variables
 
-## Learn More
+```
+DATABASE_URL
+NEXTAUTH_SECRET
+NEXTAUTH_URL
+MINIO_ENDPOINT
+MINIO_ACCESS_KEY
+MINIO_SECRET_KEY
+MINIO_BUCKET_NAME
+REDIS_URL
+RESEND_API_KEY
+SENTRY_DSN
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Project Structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+src/
+  app/          → Next.js App Router pages and layouts
+  components/   → Reusable UI components
+  lib/          → Utilities, helpers, shared logic
+  server/       → Server-only logic (Prisma client, auth config)
+  types/        → Shared TypeScript types and interfaces
+prisma/
+  schema.prisma → DB schema (single source of truth)
+docker/         → Dockerfiles and compose configs
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Deployment
 
-## Deploy on Vercel
+Deployed on a self-hosted home server. **Not on Vercel.**
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Docker on all nodes
+- Cloudflare Tunnel handles HTTPS and proxying to thadar.com
+- No raw file bytes pass through the app server — clients upload directly to MinIO via presigned URLs
