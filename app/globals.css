@@ -9,6 +9,8 @@
   --ink-faint: #4a4844;
   --stroke: #6a6864;
   --accent: #e0b97a;
+  --accent-2: #9ec3a8;
+  --accent-2-soft: rgba(158, 195, 168, 0.15);
   --danger: #d97a7a;
   --surface: rgba(255, 255, 255, 0.012);
   --surface-2: rgba(255, 255, 255, 0.02);
@@ -40,6 +42,8 @@
   --ink-faint: #c8c4ba;
   --stroke: #8a8780;
   --accent: #b8893d;
+  --accent-2: #6fa882;
+  --accent-2-soft: rgba(111, 168, 130, 0.15);
   --danger: #c44a4a;
   --surface: rgba(0, 0, 0, 0.02);
   --surface-2: rgba(0, 0, 0, 0.025);

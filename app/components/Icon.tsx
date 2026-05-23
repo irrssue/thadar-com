@@ -188,6 +188,51 @@ export default function Icon({ name, size = 20 }: IconProps) {
           <path {...stroke} d="M5 12h14 M13 6l6 6-6 6" />
         </svg>
       );
+    case "students":
+      return (
+        <svg width={s} height={s} viewBox="0 0 24 24">
+          <circle {...stroke} cx="9" cy="9" r="3" />
+          <circle {...stroke} cx="17" cy="11" r="2.4" />
+          <path {...stroke} d="M3 19c.8-3 3.4-4.5 6-4.5s5.2 1.5 6 4.5 M14.5 19c.6-2 2.2-3 4-3" />
+        </svg>
+      );
+    case "assign":
+      return (
+        <svg width={s} height={s} viewBox="0 0 24 24">
+          <path {...stroke} d="M6 4h9l4 4v12a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z M14 4v5h5 M9 14l2 2 4-4" />
+        </svg>
+      );
+    case "spark":
+      return (
+        <svg width={s} height={s} viewBox="0 0 24 24">
+          <path {...stroke} d="M12 4l1.6 4.4L18 10l-4.4 1.6L12 16l-1.6-4.4L6 10l4.4-1.6z" />
+        </svg>
+      );
+    case "pencil":
+      return (
+        <svg width={s} height={s} viewBox="0 0 24 24">
+          <path {...stroke} d="M4 20l4-1 11-11-3-3L5 16zM14 6l3 3" />
+        </svg>
+      );
+    case "alert":
+      return (
+        <svg width={s} height={s} viewBox="0 0 24 24">
+          <path {...stroke} d="M12 4l9 16H3z M12 10v5 M12 17.5v.5" />
+        </svg>
+      );
+    case "plus":
+      return (
+        <svg width={s} height={s} viewBox="0 0 24 24">
+          <path {...stroke} d="M12 5v14 M5 12h14" />
+        </svg>
+      );
+    case "search":
+      return (
+        <svg width={s} height={s} viewBox="0 0 24 24">
+          <circle {...stroke} cx="11" cy="11" r="6" />
+          <path {...stroke} d="M20 20l-4.5-4.5" />
+        </svg>
+      );
     default:
       return null;
   }
