@@ -1,24 +1,74 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import Link from "next/link";
+import { signIn } from "next-auth/react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Icon from "../components/Icon";
 
 type Mode = "login" | "register";
 
 export default function LoginPage() {
+  return (
+    <Suspense fallback={null}>
+      <LoginPageInner />
+    </Suspense>
+  );
+}
+
+function LoginPageInner() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/home";
+
   const [mode, setMode] = useState<Mode>("login");
   const [showPw, setShowPw] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
 
   const isRegister = mode === "register";
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    // backend wired later
-    console.log({ mode, name, email, password });
+    if (submitting) return;
+    setError(null);
+    setSubmitting(true);
+
+    try {
+      if (isRegister) {
+        const res = await fetch("/api/auth/register", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ name, email, password }),
+        });
+        const json = await res.json();
+        if (!res.ok || !json.success) {
+          setError(json.error ?? "Could not create account");
+          return;
+        }
+      }
+
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
+
+      if (!result || result.error) {
+        setError(isRegister ? "Account created but sign-in failed" : "Invalid email or password");
+        return;
+      }
+
+      router.push(callbackUrl);
+      router.refresh();
+    } catch {
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -190,8 +240,26 @@ export default function LoginPage() {
               </div>
             )}
 
+            {error && (
+              <div
+                role="alert"
+                style={{
+                  marginTop: 4,
+                  padding: "10px 12px",
+                  borderRadius: 10,
+                  border: "1px solid var(--danger-ring, #b54a3d)",
+                  background: "var(--danger-bg, rgba(181, 74, 61, 0.08))",
+                  color: "var(--danger, #b54a3d)",
+                  fontSize: 13,
+                }}
+              >
+                {error}
+              </div>
+            )}
+
             <button
               type="submit"
+              disabled={submitting}
               style={{
                 marginTop: 6,
                 width: "100%",
@@ -206,11 +274,18 @@ export default function LoginPage() {
                 color: "#1a1814",
                 fontSize: 14,
                 fontWeight: 600,
-                cursor: "pointer",
+                cursor: submitting ? "not-allowed" : "pointer",
+                opacity: submitting ? 0.7 : 1,
                 letterSpacing: "0.1px",
               }}
             >
-              {isRegister ? "Create account" : "Sign in"}
+              {submitting
+                ? isRegister
+                  ? "Creating account…"
+                  : "Signing in…"
+                : isRegister
+                  ? "Create account"
+                  : "Sign in"}
               <Icon name="arrow-right" size={16} />
             </button>
           </form>
