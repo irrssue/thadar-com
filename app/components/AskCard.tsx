@@ -13,6 +13,7 @@ export default function AskCard() {
         padding: "18px 20px",
         display: "flex",
         flexDirection: "column",
+        minHeight: 340,
       }}
     >
       <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between" }}>
@@ -37,7 +38,7 @@ export default function AskCard() {
         </span>
       </div>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 10, margin: "14px 0", minHeight: 180 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 10, margin: "14px 0", flex: 1 }}>
         <div
           style={{
             maxWidth: "86%",
@@ -81,7 +82,7 @@ export default function AskCard() {
         </div>
       </div>
 
-      <div style={{ display: "flex", gap: 8, marginBottom: 8, flexWrap: "wrap" }}>
+      <div style={{ display: "flex", gap: 8, marginBottom: 8, flexWrap: "wrap", justifyContent: "center" }}>
         {["＋ Summarise Ch. 7", "＋ Quiz me on vocab", "＋ Plan my week"].map((label) => (
           <span
             key={label}
@@ -106,6 +107,8 @@ export default function AskCard() {
           display: "flex",
           gap: 8,
           alignItems: "center",
+          alignSelf: "center",
+          width: "100%",
           border: "1px solid var(--stroke)",
           borderRadius: 12,
           padding: "10px 12px",

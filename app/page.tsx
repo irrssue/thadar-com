@@ -30,16 +30,34 @@ export default function Home() {
           <span style={{ color: "var(--accent)" }}>Thazin</span>
         </h1>
 
-        <p
+        <div
           style={{
-            color: "var(--ink-dim)",
-            fontSize: 16,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
             margin: "0 0 28px",
-            fontWeight: 400,
           }}
         >
-          Tuesday · 3 things due today · 1 message from Ms. Patel
-        </p>
+          <p
+            style={{
+              color: "var(--ink-dim)",
+              fontSize: 16,
+              margin: 0,
+              fontWeight: 400,
+            }}
+          >
+            Tuesday · 3 things due today · 1 message from Ms. Patel
+          </p>
+          <span
+            style={{
+              color: "var(--accent)",
+              fontSize: 16,
+              fontWeight: 500,
+            }}
+          >
+            Next Class in 2 Days
+          </span>
+        </div>
 
         <div
           style={{
