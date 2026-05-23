@@ -148,6 +148,46 @@ export default function Icon({ name, size = 20 }: IconProps) {
           <path {...stroke} d="M4 20h4l10-10-4-4L4 16z M14 6l4 4" />
         </svg>
       );
+    case "mail":
+      return (
+        <svg width={s} height={s} viewBox="0 0 24 24">
+          <path {...stroke} d="M3 6h18v12H3z M3 6l9 7 9-7" />
+        </svg>
+      );
+    case "lock":
+      return (
+        <svg width={s} height={s} viewBox="0 0 24 24">
+          <path {...stroke} d="M6 11h12v9H6z M8 11V7a4 4 0 0 1 8 0v4" />
+        </svg>
+      );
+    case "eye":
+      return (
+        <svg width={s} height={s} viewBox="0 0 24 24">
+          <path {...stroke} d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" />
+          <circle {...stroke} cx="12" cy="12" r="3" />
+        </svg>
+      );
+    case "eye-off":
+      return (
+        <svg width={s} height={s} viewBox="0 0 24 24">
+          <path {...stroke} d="M3 3l18 18 M10.6 6.2A10 10 0 0 1 12 6c6.5 0 10 6 10 6a17 17 0 0 1-3.2 4 M6.6 7.7A17 17 0 0 0 2 12s3.5 6 10 6c1.6 0 3-.3 4.2-.8 M9.9 9.9a3 3 0 0 0 4.2 4.2" />
+        </svg>
+      );
+    case "google":
+      return (
+        <svg width={s} height={s} viewBox="0 0 24 24">
+          <path fill="#4285F4" d="M21.6 12.227c0-.709-.064-1.39-.182-2.045H12v3.868h5.382a4.6 4.6 0 0 1-1.995 3.018v2.51h3.232c1.891-1.742 2.981-4.305 2.981-7.351z" />
+          <path fill="#34A853" d="M12 22c2.7 0 4.964-.895 6.619-2.422l-3.232-2.51c-.895.6-2.04.955-3.387.955-2.605 0-4.81-1.76-5.596-4.123H3.064v2.59A9.997 9.997 0 0 0 12 22z" />
+          <path fill="#FBBC05" d="M6.404 13.9a6 6 0 0 1 0-3.8V7.51H3.064a10 10 0 0 0 0 8.98z" />
+          <path fill="#EA4335" d="M12 5.977c1.468 0 2.786.505 3.823 1.496l2.868-2.868C16.959 2.99 14.695 2 12 2A9.997 9.997 0 0 0 3.064 7.51l3.34 2.59C7.19 7.736 9.395 5.977 12 5.977z" />
+        </svg>
+      );
+    case "arrow-right":
+      return (
+        <svg width={s} height={s} viewBox="0 0 24 24">
+          <path {...stroke} d="M5 12h14 M13 6l6 6-6 6" />
+        </svg>
+      );
     default:
       return null;
   }
