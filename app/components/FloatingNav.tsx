@@ -6,7 +6,7 @@ import Icon from "./Icon";
 import { useTheme } from "./ThemeProvider";
 
 const NAV_ITEMS = [
-  { id: "home", label: "Home", href: "/" },
+  { id: "home", label: "Home", href: "/home" },
   { id: "classes", label: "Classes", href: "/classes" },
   { id: "profile", label: "Profile", href: "/profile" },
   { id: "inbox", label: "Inbox", href: "/inbox" },
@@ -24,7 +24,7 @@ export default function FloatingNav({ active, onChange }: FloatingNavProps) {
   const currentId =
     active ??
     NAV_ITEMS.find((i) =>
-      i.href === "/" ? pathname === "/" : pathname.startsWith(i.href),
+      i.href === "/home" ? pathname === "/home" : pathname.startsWith(i.href),
     )?.id ??
     "home";
 

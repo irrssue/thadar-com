@@ -41,7 +41,7 @@ export default function LoginPage() {
       >
         <div style={{ textAlign: "center", marginBottom: 28 }}>
           <Link
-            href="/"
+            href="/home"
             style={{
               display: "inline-flex",
               alignItems: "center",
