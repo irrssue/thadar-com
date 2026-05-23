@@ -1,13 +1,16 @@
 "use client";
 
 import { useState } from "react";
+import { useSession } from "next-auth/react";
 import FloatingNav from "../components/FloatingNav";
-import TodoCard from "../components/TodoCard";
 import AskCard from "../components/AskCard";
 import CommandBar from "../components/CommandBar";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState("home");
+  const { data: session } = useSession();
+
+  const firstName = session?.user?.name?.split(" ")[0] ?? "there";
 
   return (
     <>
@@ -27,7 +30,7 @@ export default function Home() {
           }}
         >
           Welcome,{" "}
-          <span style={{ color: "var(--accent)" }}>Thazin</span>
+          <span style={{ color: "var(--accent)" }}>{firstName}</span>
         </h1>
 
         <div
@@ -46,17 +49,8 @@ export default function Home() {
               fontWeight: 400,
             }}
           >
-            Tuesday · 3 things due today · 1 message from Ms. Patel
+            Nothing due yet — check back when your teacher assigns work.
           </p>
-          <span
-            style={{
-              color: "var(--accent)",
-              fontSize: 16,
-              fontWeight: 500,
-            }}
-          >
-            Next Class in 2 Days
-          </span>
         </div>
 
         <div
@@ -67,7 +61,21 @@ export default function Home() {
           }}
           className="main-grid"
         >
-          <TodoCard count={5} />
+          <div
+            style={{
+              border: "1px solid var(--ink-faint)",
+              borderRadius: 14,
+              background: "var(--surface)",
+              padding: "18px 20px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "var(--ink-dim)",
+              fontSize: 14,
+            }}
+          >
+            No assignments yet.
+          </div>
           <AskCard />
         </div>
 
