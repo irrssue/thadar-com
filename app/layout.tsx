@@ -18,8 +18,9 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Thadar — Student Platform",
-  description: "Minimal student management platform",
+  title: "Thadar — The classroom platform teachers deserve",
+  description:
+    "Create classes, post lessons, track progress, and give assignments — all in one place.",
 };
 
 const themeInitScript = `(function(){try{var s=localStorage.getItem('thadar-theme');var m=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';var t=(s==='light'||s==='dark')?s:m;document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();`;
