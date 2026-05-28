@@ -9,14 +9,14 @@ declare module "next-auth" {
   interface Session {
     user: {
       id: string;
-      role: "STUDENT" | "TEACHER" | "ADMIN";
+      defaultView: "TEACHER" | "STUDENT";
     } & DefaultSession["user"];
   }
 }
 
 declare module "@auth/core/jwt" {
   interface JWT {
-    role?: "STUDENT" | "TEACHER" | "ADMIN";
+    defaultView?: "TEACHER" | "STUDENT";
   }
 }
 
@@ -50,23 +50,27 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           id: user.id,
           email: user.email,
           name: user.name ?? undefined,
-          role: user.role,
+          defaultView: user.defaultView,
         };
       },
     }),
   ],
   callbacks: {
-    jwt: ({ token, user }) => {
+    jwt: ({ token, user, trigger, session }) => {
       if (user) {
         token.sub = user.id;
-        token.role = (user as { role?: "STUDENT" | "TEACHER" | "ADMIN" }).role;
+        token.defaultView = (user as { defaultView?: "TEACHER" | "STUDENT" }).defaultView;
+      }
+      if (trigger === "update" && session && typeof session === "object") {
+        const next = (session as { defaultView?: "TEACHER" | "STUDENT" }).defaultView;
+        if (next === "TEACHER" || next === "STUDENT") token.defaultView = next;
       }
       return token;
     },
     session: ({ session, token }) => {
       if (session.user && token.sub) {
         session.user.id = token.sub;
-        session.user.role = token.role ?? "STUDENT";
+        session.user.defaultView = token.defaultView ?? "STUDENT";
       }
       return session;
     },

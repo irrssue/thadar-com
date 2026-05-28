@@ -40,14 +40,14 @@ export async function POST(req: Request) {
     );
   }
 
-  const role = parsed.data.intent === "teacher" ? "TEACHER" : "STUDENT";
+  const defaultView = parsed.data.intent === "teacher" ? "TEACHER" : "STUDENT";
 
   await prisma.user.update({
     where: { id: session.user.id },
-    data: { role },
+    data: { defaultView },
   });
 
-  const redirect = role === "TEACHER" ? "/teacher" : "/home";
+  const redirect = defaultView === "TEACHER" ? "/teacher" : "/home";
   return NextResponse.json<ApiResponse<{ redirect: string }>>(
     { success: true, data: { redirect } },
     { status: 200 },

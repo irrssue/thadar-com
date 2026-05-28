@@ -6,21 +6,82 @@ datasource db {
   provider = "postgresql"
 }
 
-enum Role {
-  STUDENT
+enum DefaultView {
   TEACHER
-  ADMIN
+  STUDENT
+}
+
+enum TeacherStatus {
+  UNVERIFIED
+  PENDING
+  VERIFIED
+}
+
+enum DiscoveryStatus {
+  PRIVATE
+  PENDING_REVIEW
+  PUBLISHED
+}
+
+enum MembershipRole {
+  TEACHER
+  STUDENT
+}
+
+enum MembershipStatus {
+  PENDING
+  ACTIVE
+  REMOVED
 }
 
 model User {
-  id           String   @id @default(cuid())
-  email        String   @unique
-  name         String?
-  passwordHash String?
-  role         Role     @default(STUDENT)
-  image        String?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id            String        @id @default(cuid())
+  email         String        @unique
+  name          String?
+  passwordHash  String?
+  image         String?
+  defaultView   DefaultView   @default(STUDENT)
+  teacherStatus TeacherStatus @default(UNVERIFIED)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  ownedClasses Class[]             @relation("ClassOwner")
+  memberships  ClassMembership[]
 
   @@index([email])
+}
+
+model Class {
+  id                 String          @id @default(cuid())
+  ownerId            String
+  name               String
+  description        String?
+  inviteCode         String          @unique
+  inviteCodeEnabled  Boolean         @default(true)
+  discoveryStatus    DiscoveryStatus @default(PRIVATE)
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
+
+  owner       User              @relation("ClassOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  memberships ClassMembership[]
+
+  @@index([ownerId])
+  @@index([inviteCode])
+}
+
+model ClassMembership {
+  id        String           @id @default(cuid())
+  userId    String
+  classId   String
+  role      MembershipRole
+  status    MembershipStatus @default(PENDING)
+  joinedAt  DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  class Class @relation(fields: [classId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, classId])
+  @@index([classId, status])
+  @@index([userId, status])
 }
