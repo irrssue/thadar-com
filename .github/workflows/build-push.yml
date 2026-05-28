@@ -83,22 +83,8 @@ jobs:
           SHA_TAG: sha-${{ github.sha }}
           GHCR_READ_TOKEN: ${{ secrets.GHCR_READ_TOKEN }}
         run: |
-          # Write deploy script to a temp file — avoids heredoc inside YAML
-          cat > /tmp/deploy.sh << 'SCRIPT'
-          #!/usr/bin/env bash
-          set -e
-          cd ~/thadar.com
-          docker pull ghcr.io/irrssue/thadar:latest
-          docker compose -f docker/homeserver/docker-compose.yml up -d --no-build thadar
-          docker image prune -f --filter "until=24h" \
-            --filter "label=org.opencontainers.image.source=https://github.com/irrssue/thadar.com"
-          echo "deployed: $DEPLOY_SHA"
-          SCRIPT
-
-          # docker login: pipe token via stdin to remote shell
-          printf '%s' "$GHCR_READ_TOKEN" | ssh ssh.irrssue.com \
-            'docker login ghcr.io -u irrssue --password-stdin'
-
-          # copy script then execute with SHA injected as env var (no ${{ }} on remote)
-          scp /tmp/deploy.sh ssh.irrssue.com:/tmp/thadar-deploy.sh
-          ssh ssh.irrssue.com "DEPLOY_SHA='$SHA_TAG' bash /tmp/thadar-deploy.sh"
+          printf '%s' "$GHCR_READ_TOKEN" | ssh ssh.irrssue.com 'docker login ghcr.io -u irrssue --password-stdin'
+          ssh ssh.irrssue.com 'docker pull ghcr.io/irrssue/thadar:latest'
+          ssh ssh.irrssue.com 'cd ~/thadar.com && docker compose -f docker/homeserver/docker-compose.yml up -d --no-build thadar'
+          ssh ssh.irrssue.com 'docker image prune -f --filter "until=24h" --filter "label=org.opencontainers.image.source=https://github.com/irrssue/thadar.com"'
+          echo "deployed: $SHA_TAG"
