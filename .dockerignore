@@ -1,0 +1,13 @@
+.git
+.github
+node_modules
+.next
+.env*
+!.env.example
+*.tsbuildinfo
+next-env.d.ts
+README.md
+CLAUDE.md
+AGENTS.md
+THADAR_PLAN.md
+.DS_Store
