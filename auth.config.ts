@@ -1,6 +1,6 @@
 import type { NextAuthConfig } from "next-auth";
 
-const PROTECTED_PREFIXES = ["/home", "/classes", "/profile", "/inbox"];
+const PROTECTED_PREFIXES = ["/home", "/classes", "/profile", "/inbox", "/teacher", "/signup/intent"];
 
 export default {
   pages: { signIn: "/login" },

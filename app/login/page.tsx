@@ -65,7 +65,10 @@ function LoginPageInner() {
 
       if (isRegister) {
         setToast("Account created successfully!");
-        await new Promise((r) => setTimeout(r, 1500));
+        await new Promise((r) => setTimeout(r, 1200));
+        router.push("/signup/intent");
+        router.refresh();
+        return;
       }
 
       router.push(callbackUrl);
