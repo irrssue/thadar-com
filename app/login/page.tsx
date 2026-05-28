@@ -21,7 +21,9 @@ function LoginPageInner() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/home";
 
-  const [mode, setMode] = useState<Mode>("login");
+  const [mode, setMode] = useState<Mode>(
+    searchParams.get("mode") === "register" ? "register" : "login"
+  );
   const [showPw, setShowPw] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
