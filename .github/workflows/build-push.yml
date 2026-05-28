@@ -84,6 +84,7 @@ jobs:
           GHCR_READ_TOKEN: ${{ secrets.GHCR_READ_TOKEN }}
         run: |
           printf '%s' "$GHCR_READ_TOKEN" | ssh ssh.irrssue.com 'docker login ghcr.io -u irrssue --password-stdin'
+          ssh ssh.irrssue.com 'cd ~/thadar.com && git pull --ff-only origin main'
           ssh ssh.irrssue.com 'docker pull ghcr.io/irrssue/thadar:latest'
           ssh ssh.irrssue.com 'cd ~/thadar.com && docker compose -f docker/homeserver/docker-compose.yml up -d --no-build thadar'
           ssh ssh.irrssue.com 'docker image prune -f --filter "until=24h" --filter "label=org.opencontainers.image.source=https://github.com/irrssue/thadar.com"'
