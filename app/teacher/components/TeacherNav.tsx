@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Icon from "../../components/Icon";
 import { useTheme } from "../../components/ThemeProvider";
+import ViewSwitcher from "../../components/ViewSwitcher";
 
 const NAV_ITEMS = [
   { id: "home",     label: "Home",        href: "/teacher" },
@@ -150,6 +151,7 @@ export default function TeacherNav() {
             </Link>
           );
         })}
+        <ViewSwitcher current="TEACHER" />
       </nav>
       <style>{`
         .nav-btn:hover { background: var(--surface-hover) !important; color: var(--ink) !important; }

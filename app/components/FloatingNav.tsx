@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Icon from "./Icon";
 import { useTheme } from "./ThemeProvider";
+import ViewSwitcher from "./ViewSwitcher";
 
 const NAV_ITEMS = [
   { id: "home", label: "Home", href: "/home" },
@@ -154,6 +155,7 @@ export default function FloatingNav({ active, onChange }: FloatingNavProps) {
             </Link>
           );
         })}
+        <ViewSwitcher current="STUDENT" />
       </nav>
       <style>{`
         .nav-btn:hover { background: var(--surface-hover) !important; color: var(--ink) !important; }
