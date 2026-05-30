@@ -1,120 +1,117 @@
 "use client";
 
-import { WfBox, PillStub, Avatar, ProgressBar, CommandBar } from "../components/primitives";
+import { useCallback, useEffect, useState } from "react";
+import { WfBox, PillStub, Avatar, CommandBar } from "../components/primitives";
 
-const ROSTER = [
-  { name: "Aaliyah Banerjee", id: "ST-2210", progress: 92, late: 0, flag: null },
-  { name: "Diego Alvarez",    id: "ST-2211", progress: 78, late: 1, flag: null },
-  { name: "Emma Liu",         id: "ST-2212", progress: 96, late: 0, flag: "stretch" },
-  { name: "Hassan Karim",     id: "ST-2213", progress: 41, late: 4, flag: "support" },
-  { name: "Isla Romero",      id: "ST-2214", progress: 65, late: 2, flag: null },
-  { name: "Jonah Park",       id: "ST-2215", progress: 88, late: 0, flag: null },
-  { name: "Mei Tanaka",       id: "ST-2216", progress: 73, late: 1, flag: null },
-  { name: "Noor Abadi",       id: "ST-2217", progress: 54, late: 3, flag: "support" },
-  { name: "Saw Thura Zaw",    id: "ST-2218", progress: 81, late: 0, flag: null },
-];
-
-const supportCount = ROSTER.filter((r) => r.flag === "support").length;
-const stretchCount = ROSTER.filter((r) => r.flag === "stretch").length;
+type Person = { id: string; name: string | null; email: string };
+type Member = { id: string; status: string; user: Person };
+type OverviewClass = { id: string; name: string; students: Member[]; pending: Member[]; activeCount: number; pendingCount: number };
+type Overview = {
+  totals: { classes: number; students: number; pending: number };
+  classes: OverviewClass[];
+};
+type ApiResponse<T> = { success: true; data: T } | { success: false; error: string };
 
 export default function TeacherStudents() {
+  const [data, setData] = useState<Overview | null>(null);
+  const [classFilter, setClassFilter] = useState<string>("all");
+  const [busy, setBusy] = useState<string | null>(null);
+
+  const load = useCallback(async () => {
+    const res = await fetch("/api/teacher/overview", { cache: "no-store" });
+    const json: ApiResponse<Overview> = await res.json();
+    if (json.success) setData(json.data);
+  }, []);
+
+  useEffect(() => { load(); }, [load]);
+
+  async function decide(classId: string, mid: string, action: "approve" | "deny") {
+    setBusy(mid);
+    try {
+      await fetch(`/api/classes/${classId}/members/${mid}`, {
+        method: "PATCH",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ action }),
+      });
+      await load();
+    } finally { setBusy(null); }
+  }
+  async function remove(classId: string, mid: string) {
+    setBusy(mid);
+    try {
+      await fetch(`/api/classes/${classId}/members/${mid}`, { method: "DELETE" });
+      await load();
+    } finally { setBusy(null); }
+  }
+
+  const classes = (data?.classes ?? []).filter((c) => classFilter === "all" || c.id === classFilter);
+  const allPending = (data?.classes ?? []).flatMap((c) => c.pending.map((p) => ({ ...p, classId: c.id, className: c.name })));
+
   return (
     <>
       <h1 style={{ fontWeight: 700, fontSize: 52, margin: "16px 0 4px", letterSpacing: "-0.5px" }}>
         Your <span style={{ color: "var(--accent)" }}>students</span>
       </h1>
       <p style={{ color: "var(--ink-dim)", fontSize: 18, margin: "0 0 28px", fontWeight: 300 }}>
-        86 across 4 sections · {supportCount} need support · {stretchCount} ready for stretch
+        {data ? `${data.totals.students} across ${data.totals.classes} ${data.totals.classes === 1 ? "class" : "classes"} · ${data.totals.pending} pending` : "Loading…"}
       </p>
 
+      {allPending.length > 0 && (
+        <WfBox style={{ marginBottom: 22 }}>
+          <div style={{ fontSize: 13, color: "var(--ink-dim)", fontFamily: "var(--font-mono)", textTransform: "uppercase", letterSpacing: 1, marginBottom: 12 }}>
+            Pending approvals ({allPending.length})
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            {allPending.map((p) => (
+              <div key={p.id} style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 12px", border: "1.2px dashed var(--accent)", borderRadius: 10 }}>
+                <Avatar name={p.user.name ?? p.user.email} size={32} />
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontSize: 16 }}>{p.user.name ?? p.user.email}</div>
+                  <div style={{ fontSize: 11, color: "var(--ink-faint)", fontFamily: "var(--font-mono)" }}>{p.className} · {p.user.email}</div>
+                </div>
+                <button onClick={() => decide(p.classId, p.id, "approve")} disabled={busy === p.id} style={approveBtn}>Approve</button>
+                <button onClick={() => decide(p.classId, p.id, "deny")} disabled={busy === p.id} style={denyBtn}>Deny</button>
+              </div>
+            ))}
+          </div>
+        </WfBox>
+      )}
+
       <div style={{ display: "flex", gap: 8, marginBottom: 18, flexWrap: "wrap" }}>
-        <PillStub variant="active">All sections</PillStub>
-        <PillStub>Math 10 · P3</PillStub>
-        <PillStub>Math 10 · P5</PillStub>
-        <PillStub>Math 9 · P1</PillStub>
-        <PillStub style={{ marginLeft: "auto" }}>↑ name</PillStub>
-        <PillStub>↑ progress</PillStub>
-        <PillStub>↑ flags</PillStub>
+        <PillStub variant={classFilter === "all" ? "active" : "default"} onClick={() => setClassFilter("all")}>All classes</PillStub>
+        {(data?.classes ?? []).map((c) => (
+          <PillStub key={c.id} variant={classFilter === c.id ? "active" : "default"} onClick={() => setClassFilter(c.id)}>{c.name}</PillStub>
+        ))}
       </div>
 
-      <WfBox>
-        {/* Header row */}
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "32px 1fr 130px 70px 90px",
-          gap: 14,
-          padding: "0 12px 10px",
-          color: "var(--ink-faint)",
-          fontFamily: "var(--font-mono)",
-          fontSize: 10,
-          letterSpacing: 1,
-          textTransform: "uppercase",
-        }}
-          className="roster-header"
-        >
-          <span />
-          <span>Name</span>
-          <span className="hide-mobile">Mastery</span>
-          <span className="hide-mobile">Late</span>
-          <span>Flag</span>
-        </div>
+      {!data && <Muted>Loading…</Muted>}
+      {data && data.totals.students === 0 && <Muted>No students yet. Share an invite code from a class to get started.</Muted>}
 
-        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          {ROSTER.map((s, i) => (
-            <div key={i} style={{
-              display: "grid",
-              gridTemplateColumns: "32px 1fr 130px 70px 90px",
-              gap: 14,
-              alignItems: "center",
-              padding: "10px 12px",
-              border: "1.2px dashed var(--ink-faint)",
-              borderRadius: 10,
-            }}
-              className="roster-row"
-            >
-              <Avatar name={s.name} size={32} />
-
-              <div>
-                <div style={{ fontSize: 16 }}>{s.name}</div>
-                <div style={{ fontSize: 11, color: "var(--ink-faint)", fontFamily: "var(--font-mono)" }}>
-                  {s.id}
+      {classes.map((c) => c.students.length > 0 && (
+        <WfBox key={c.id} style={{ marginBottom: 16 }}>
+          <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 12 }}>{c.name}</div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            {c.students.map((m) => (
+              <div key={m.id} style={{ display: "flex", alignItems: "center", gap: 14, padding: "10px 12px", border: "1.2px dashed var(--ink-faint)", borderRadius: 10 }}>
+                <Avatar name={m.user.name ?? m.user.email} size={32} />
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontSize: 16 }}>{m.user.name ?? m.user.email}</div>
+                  <div style={{ fontSize: 11, color: "var(--ink-faint)", fontFamily: "var(--font-mono)" }}>{m.user.email}</div>
                 </div>
+                <button onClick={() => remove(c.id, m.id)} disabled={busy === m.id} style={denyBtn}>Remove</button>
               </div>
-
-              <div className="hide-mobile">
-                <ProgressBar value={s.progress} />
-              </div>
-
-              <div
-                className="hide-mobile"
-                style={{
-                  fontSize: 14,
-                  color: s.late > 0 ? "var(--danger)" : "var(--ink-faint)",
-                  fontFamily: "var(--font-mono)",
-                }}
-              >
-                {s.late > 0 ? `${s.late} late` : "—"}
-              </div>
-
-              <div>
-                {s.flag === "support" && <PillStub variant="danger">support</PillStub>}
-                {s.flag === "stretch" && <PillStub variant="sage">stretch</PillStub>}
-                {!s.flag && <span style={{ color: "var(--ink-faint)" }}>—</span>}
-              </div>
-            </div>
-          ))}
-        </div>
-      </WfBox>
+            ))}
+          </div>
+        </WfBox>
+      ))}
 
       <CommandBar />
-
-      <style>{`
-        @media (max-width: 880px) {
-          .roster-header, .roster-row {
-            grid-template-columns: 28px 1fr 90px !important;
-          }
-        }
-      `}</style>
     </>
   );
 }
+
+function Muted({ children }: { children: React.ReactNode }) {
+  return <div style={{ color: "var(--ink-dim)", fontSize: 14, padding: "8px 0" }}>{children}</div>;
+}
+const approveBtn: React.CSSProperties = { padding: "6px 14px", borderRadius: 999, border: "1.4px solid var(--accent)", background: "var(--accent-soft)", color: "var(--accent)", fontSize: 13, cursor: "pointer" };
+const denyBtn: React.CSSProperties = { padding: "6px 14px", borderRadius: 999, border: "1.2px solid var(--danger)", background: "transparent", color: "var(--danger)", fontSize: 13, cursor: "pointer" };
