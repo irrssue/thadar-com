@@ -1,157 +1,130 @@
 "use client";
 
+import { useCallback, useEffect, useState } from "react";
+import Link from "next/link";
 import { useSession } from "next-auth/react";
 import Icon from "../components/Icon";
-import {
-  WfBox, CornerTag, PillStub, CheckBox, Row, Btn, AiInput, Bubble, CommandBar, Avatar,
-} from "./components/primitives";
+import { WfBox, CornerTag, PillStub, Row, Btn, AiInput, Bubble, CommandBar, Avatar } from "./components/primitives";
 
-const GRADING_QUEUE = [
-  { title: "Algebra II — Worksheet 4.3", from: "Math 10 · Period 3", count: "18 of 24", urgent: true },
-  { title: "Quiz: Linear Equations",     from: "Math 9 · Period 1",  count: "22 of 22", urgent: false },
-  { title: "Geometry proof — homework",  from: "Math 10 · Period 5", count: "9 of 24",  urgent: false },
-  { title: "Re-submission: Sara R.",     from: "Math 10 · Period 3", count: "1",         urgent: false },
-];
-
-const PULSE = [
-  { tag: "support", name: "Hassan K.", note: "4 late submissions · 41% mastery on factoring" },
-  { tag: "support", name: "Noor A.",   note: "Missed 2 quizzes · low confidence in word problems" },
-  { tag: "stretch", name: "Emma L.",   note: "96% mastery · ready for stretch problems" },
-];
+type OverviewAssignment = { id: string; title: string; status: string; dueAt: string | null; _count: { submissions: number } };
+type Member = { id: string; status: string; user: { id: string; name: string | null; email: string } };
+type OverviewClass = { id: string; name: string; assignments: OverviewAssignment[]; pending: Member[]; activeCount: number };
+type Overview = {
+  totals: { classes: number; students: number; pending: number; assignments: number; needsGrading: number };
+  classes: OverviewClass[];
+};
+type ApiResponse<T> = { success: true; data: T } | { success: false; error: string };
 
 export default function TeacherHome() {
   const { data: session } = useSession();
   const firstName = session?.user?.name?.split(" ")[0] ?? "there";
+  const [data, setData] = useState<Overview | null>(null);
+  const [busy, setBusy] = useState<string | null>(null);
+
+  const load = useCallback(async () => {
+    const res = await fetch("/api/teacher/overview", { cache: "no-store" });
+    const json: ApiResponse<Overview> = await res.json();
+    if (json.success) setData(json.data);
+  }, []);
+
+  useEffect(() => { load(); }, [load]);
+
+  async function decide(classId: string, mid: string, action: "approve" | "deny") {
+    setBusy(mid);
+    try {
+      await fetch(`/api/classes/${classId}/members/${mid}`, { method: "PATCH", headers: { "content-type": "application/json" }, body: JSON.stringify({ action }) });
+      await load();
+    } finally { setBusy(null); }
+  }
+
+  const gradingQueue = (data?.classes ?? []).flatMap((c) =>
+    c.assignments
+      .filter((a) => a.status === "PUBLISHED" && a._count.submissions > 0)
+      .map((a) => ({ ...a, className: c.name, classId: c.id })),
+  );
+  const pending = (data?.classes ?? []).flatMap((c) => c.pending.map((p) => ({ ...p, className: c.name, classId: c.id })));
+
+  const subtitle = data
+    ? `${data.totals.classes} classes · ${data.totals.students} students · ${data.totals.pending} pending · ${gradingQueue.length} with submissions`
+    : "Loading your classroom…";
 
   return (
     <>
       <h1 style={{ fontWeight: 700, fontSize: 52, margin: "16px 0 4px", letterSpacing: "-0.5px" }}>
         Welcome back, <span style={{ color: "var(--accent)" }}>{firstName}</span>
       </h1>
-      <p style={{ color: "var(--ink-dim)", fontSize: 18, margin: "0 0 28px", fontWeight: 300 }}>
-        Tuesday · 4 items to grade · 2 unread messages · next class in 14 min
-      </p>
+      <p style={{ color: "var(--ink-dim)", fontSize: 18, margin: "0 0 28px", fontWeight: 300 }}>{subtitle}</p>
 
-      {/* Main 2-col grid */}
-      <div
-        style={{ display: "grid", gridTemplateColumns: "1fr 1.4fr", gap: 28 }}
-        className="teacher-split"
-      >
-        {/* Grading queue */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1.4fr", gap: 28 }} className="teacher-split">
+        {/* Grading queue (real) */}
         <WfBox>
           <CornerTag label="to grade" />
           <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between" }}>
-            <div style={{ fontSize: 22, fontWeight: 700 }}>To grade</div>
-            <span style={{ color: "var(--ink-dim)", fontSize: 14, fontWeight: 300 }}>
-              {GRADING_QUEUE.length} items · ~{GRADING_QUEUE.length * 8}m est.
-            </span>
+            <div style={{ fontSize: 22, fontWeight: 700 }}>Submissions</div>
+            <span style={{ color: "var(--ink-dim)", fontSize: 14, fontWeight: 300 }}>{gradingQueue.length} assignments</span>
           </div>
-
-          <div style={{ display: "flex", gap: 8, marginTop: 8, flexWrap: "wrap" }}>
-            <PillStub variant="active">All</PillStub>
-            <PillStub>Math 10 · P3</PillStub>
-            <PillStub>Math 10 · P5</PillStub>
-            <PillStub>Math 9</PillStub>
-          </div>
-
           <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 14 }}>
-            {GRADING_QUEUE.map((item, i) => (
-              <Row key={i} urgent={item.urgent}>
-                <CheckBox />
-                <div style={{ display: "flex", flexDirection: "column", gap: 2, flex: 1, minWidth: 0 }}>
-                  <div style={{ fontSize: 17 }}>{item.title}</div>
-                  <div style={{ fontSize: 12, color: "var(--ink-dim)", fontFamily: "var(--font-mono)" }}>
-                    {item.from}
+            {!data && <Muted>Loading…</Muted>}
+            {data && gradingQueue.length === 0 && <Muted>No submissions waiting. You&apos;re all caught up.</Muted>}
+            {gradingQueue.map((a) => (
+              <Link key={a.id} href={`/teacher/classes/${a.classId}`} style={{ textDecoration: "none", color: "inherit" }}>
+                <Row>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 2, flex: 1, minWidth: 0 }}>
+                    <div style={{ fontSize: 17 }}>{a.title}</div>
+                    <div style={{ fontSize: 12, color: "var(--ink-dim)", fontFamily: "var(--font-mono)" }}>{a.className}</div>
                   </div>
-                </div>
-                <div style={{
-                  fontFamily: "var(--font-mono)",
-                  fontSize: 11,
-                  color: item.urgent ? "var(--danger)" : "var(--ink-faint)",
-                  marginLeft: "auto",
-                }}>
-                  {item.count}
-                </div>
-              </Row>
+                  <div style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: "var(--accent)", marginLeft: "auto" }}>
+                    {a._count.submissions} submitted
+                  </div>
+                </Row>
+              </Link>
             ))}
           </div>
-
           <div style={{ display: "flex", gap: 10, marginTop: 14 }}>
-            <Btn variant="primary">
-              <Icon name="pencil" size={14} /> Grade in batch
-            </Btn>
-            <Btn>Auto-grade quizzes</Btn>
+            <Link href="/teacher/assignments" style={{ textDecoration: "none" }}>
+              <Btn variant="primary"><Icon name="pencil" size={14} /> Manage assignments</Btn>
+            </Link>
           </div>
         </WfBox>
 
-        {/* Co-teacher AI */}
+        {/* Co-teacher AI — showcase placeholder (AI features are post-MVP, plan v5) */}
         <WfBox style={{ display: "flex", flexDirection: "column" }}>
-          <CornerTag label="co-teacher" />
+          <CornerTag label="co-teacher · coming soon" />
           <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between" }}>
             <div style={{ fontSize: 22, fontWeight: 700, display: "inline-flex", alignItems: "center", gap: 8 }}>
               <Icon name="spark" /> Draft with co-teacher
             </div>
-            <span style={{ color: "var(--ink-dim)", fontSize: 14, fontWeight: 300 }}>
-              AI · context: your curriculum
-            </span>
+            <span style={{ color: "var(--ink-dim)", fontSize: 14, fontWeight: 300 }}>AI · preview</span>
           </div>
-
-          <div style={{ display: "flex", flexDirection: "column", gap: 10, margin: "10px 0 14px", minHeight: 180 }}>
-            <Bubble>Want me to draft Friday's exit ticket on factoring? I can match the difficulty of 4.3.</Bubble>
-            <Bubble me>yes — 4 questions, 2 word problems, no calculators</Bubble>
-            <Bubble>
-              Done. Draft saved as <em>"Exit ticket · Factoring · v1"</em>. I aligned it to{" "}
-              <em>HSA-SSE.A.2</em> and flagged it for Math 10 · P3. Want me to also generate a rubric
-              and an answer key?
-            </Bubble>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10, margin: "10px 0 14px", minHeight: 160 }}>
+            <Bubble>Soon I&apos;ll help you draft assignments, rubrics, and family updates from your curriculum.</Bubble>
+            <Bubble me>can&apos;t wait</Bubble>
           </div>
-
-          <AiInput placeholder="Draft an assignment, rubric, lesson plan, or family update…" />
-
-          <div style={{ display: "flex", gap: 8, marginTop: 12, flexWrap: "wrap" }}>
-            <PillStub>＋ Lesson plan from standard</PillStub>
-            <PillStub>＋ Worksheet from notes</PillStub>
-            <PillStub>＋ Parent update (weekly)</PillStub>
-            <PillStub>＋ Differentiate for IEP</PillStub>
-          </div>
+          <AiInput placeholder="AI co-teacher arrives in a later release…" />
         </WfBox>
       </div>
 
-      {/* Pulse row */}
+      {/* Pending approvals (real) */}
       <div style={{ marginTop: 28 }}>
         <WfBox>
-          <CornerTag label="class pulse" />
+          <CornerTag label="needs attention" />
           <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between" }}>
-            <div style={{ fontSize: 22, fontWeight: 700 }}>Needs attention</div>
-            <span style={{ color: "var(--ink-dim)", fontSize: 14, fontWeight: 300 }}>
-              flagged by AI · auto-refreshed daily
-            </span>
+            <div style={{ fontSize: 22, fontWeight: 700 }}>Pending approvals</div>
+            <span style={{ color: "var(--ink-dim)", fontSize: 14, fontWeight: 300 }}>{pending.length} waiting</span>
           </div>
-          <div
-            style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 14, marginTop: 14 }}
-            className="teacher-split"
-          >
-            {PULSE.map((p, i) => (
-              <WfBox key={i} solid style={{ padding: 14 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
-                  <Avatar name={p.name} />
-                  <div>
-                    <div style={{ fontSize: 16 }}>{p.name}</div>
-                    <div style={{
-                      fontFamily: "var(--font-mono)",
-                      fontSize: 10,
-                      color: p.tag === "support" ? "var(--danger)" : "var(--accent-2)",
-                      textTransform: "uppercase",
-                      letterSpacing: 1,
-                    }}>
-                      {p.tag}
-                    </div>
-                  </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 14 }}>
+            {!data && <Muted>Loading…</Muted>}
+            {data && pending.length === 0 && <Muted>No pending requests right now.</Muted>}
+            {pending.map((p) => (
+              <div key={p.id} style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 12px", border: "1.2px dashed var(--accent)", borderRadius: 10 }}>
+                <Avatar name={p.user.name ?? p.user.email} size={32} />
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontSize: 16 }}>{p.user.name ?? p.user.email}</div>
+                  <div style={{ fontSize: 11, color: "var(--ink-faint)", fontFamily: "var(--font-mono)" }}>{p.className}</div>
                 </div>
-                <div style={{ color: "var(--ink-dim)", fontSize: 14, fontWeight: 300, lineHeight: 1.35 }}>
-                  {p.note}
-                </div>
-              </WfBox>
+                <button onClick={() => decide(p.classId, p.id, "approve")} disabled={busy === p.id} style={approveBtn}>Approve</button>
+                <button onClick={() => decide(p.classId, p.id, "deny")} disabled={busy === p.id} style={denyBtn}>Deny</button>
+              </div>
             ))}
           </div>
         </WfBox>
@@ -161,3 +134,9 @@ export default function TeacherHome() {
     </>
   );
 }
+
+function Muted({ children }: { children: React.ReactNode }) {
+  return <div style={{ color: "var(--ink-dim)", fontSize: 14, padding: "8px 0" }}>{children}</div>;
+}
+const approveBtn: React.CSSProperties = { padding: "6px 14px", borderRadius: 999, border: "1.4px solid var(--accent)", background: "var(--accent-soft)", color: "var(--accent)", fontSize: 13, cursor: "pointer" };
+const denyBtn: React.CSSProperties = { padding: "6px 14px", borderRadius: 999, border: "1.2px solid var(--danger)", background: "transparent", color: "var(--danger)", fontSize: 13, cursor: "pointer" };
