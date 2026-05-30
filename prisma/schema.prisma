@@ -35,6 +35,27 @@ enum MembershipStatus {
   REMOVED
 }
 
+enum AssignmentStatus {
+  DRAFT
+  PUBLISHED
+}
+
+enum SubmissionStatus {
+  SUBMITTED
+  GRADED
+  RETURNED
+}
+
+enum NotificationType {
+  MEMBERSHIP_REQUEST
+  MEMBERSHIP_APPROVED
+  MEMBERSHIP_DENIED
+  ASSIGNMENT_POSTED
+  SUBMISSION_RECEIVED
+  GRADE_RETURNED
+  MESSAGE_RECEIVED
+}
+
 model User {
   id            String        @id @default(cuid())
   email         String        @unique
@@ -43,11 +64,19 @@ model User {
   image         String?
   defaultView   DefaultView   @default(STUDENT)
   teacherStatus TeacherStatus @default(UNVERIFIED)
+  emailVerified Boolean       @default(false)
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
 
-  ownedClasses Class[]             @relation("ClassOwner")
-  memberships  ClassMembership[]
+  ownedClasses        Class[]            @relation("ClassOwner")
+  memberships         ClassMembership[]
+  authoredAssignments Assignment[]       @relation("AssignmentAuthor")
+  submissions         Submission[]
+  lessonViews         LessonView[]
+  sentMessages        Message[]          @relation("MessageSender")
+  receivedMessages    Message[]          @relation("MessageRecipient")
+  notifications       Notification[]
+  auditLogs           AuditLog[]
 
   @@index([email])
 }
@@ -65,6 +94,8 @@ model Class {
 
   owner       User              @relation("ClassOwner", fields: [ownerId], references: [id], onDelete: Cascade)
   memberships ClassMembership[]
+  lessons     Lesson[]
+  assignments Assignment[]
 
   @@index([ownerId])
   @@index([inviteCode])
@@ -85,4 +116,122 @@ model ClassMembership {
   @@unique([userId, classId])
   @@index([classId, status])
   @@index([userId, status])
+}
+
+model Lesson {
+  id        String   @id @default(cuid())
+  classId   String
+  title     String
+  content   String   @default("")
+  order     Int      @default(0)
+  published Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  class       Class        @relation(fields: [classId], references: [id], onDelete: Cascade)
+  views       LessonView[]
+  assignments Assignment[]
+
+  @@index([classId, order])
+}
+
+model LessonView {
+  id       String   @id @default(cuid())
+  lessonId String
+  userId   String
+  viewedAt DateTime @default(now())
+
+  lesson Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([lessonId, userId])
+  @@index([userId])
+}
+
+model Assignment {
+  id           String           @id @default(cuid())
+  classId      String
+  lessonId     String?
+  authorId     String
+  title        String
+  instructions String           @default("")
+  dueAt        DateTime?
+  status       AssignmentStatus @default(DRAFT)
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  class       Class        @relation(fields: [classId], references: [id], onDelete: Cascade)
+  lesson      Lesson?      @relation(fields: [lessonId], references: [id], onDelete: SetNull)
+  author      User         @relation("AssignmentAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+  submissions Submission[]
+
+  @@index([classId, status])
+  @@index([dueAt])
+}
+
+model Submission {
+  id           String           @id @default(cuid())
+  assignmentId String
+  studentId    String
+  content      String           @default("")
+  status       SubmissionStatus @default(SUBMITTED)
+  grade        String?
+  feedback     String?
+  submittedAt  DateTime         @default(now())
+  gradedAt     DateTime?
+  updatedAt    DateTime         @updatedAt
+
+  assignment Assignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  student    User       @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@unique([assignmentId, studentId])
+  @@index([assignmentId, status])
+  @@index([studentId])
+}
+
+model Message {
+  id          String    @id @default(cuid())
+  senderId    String
+  recipientId String
+  classId     String?
+  subject     String
+  body        String    @default("")
+  readAt      DateTime?
+  starred     Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+
+  sender    User  @relation("MessageSender", fields: [senderId], references: [id], onDelete: Cascade)
+  recipient User  @relation("MessageRecipient", fields: [recipientId], references: [id], onDelete: Cascade)
+
+  @@index([recipientId, readAt])
+  @@index([senderId])
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  type      NotificationType
+  title     String
+  body      String           @default("")
+  link      String?
+  readAt    DateTime?
+  createdAt DateTime         @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, readAt])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  actorId   String?
+  action    String
+  target    String?
+  metadata  String?
+  createdAt DateTime @default(now())
+
+  actor User? @relation(fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([action])
+  @@index([createdAt])
 }
