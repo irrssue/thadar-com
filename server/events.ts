@@ -1,6 +1,6 @@
 import "server-only";
 import { prisma } from "./db";
-import { sendEmail, emailLayout } from "./email";
+import { sendEmail, emailLayout, esc } from "./email";
 import type { NotificationType } from "@prisma/client";
 
 /**
@@ -80,7 +80,7 @@ export async function onJoinRequested(params: {
     subject: `New join request for ${params.className}`,
     html: emailLayout({
       heading: "New join request",
-      body: `<strong>${who}</strong> has requested to join <strong>${params.className}</strong>. Approve or decline from your class roster.`,
+      body: `<strong>${esc(who)}</strong> has requested to join <strong>${esc(params.className)}</strong>. Approve or decline from your class roster.`,
       cta: { label: "Review request", url: link(`/teacher/classes/${params.classId}`) },
     }),
   });
@@ -108,7 +108,7 @@ export async function onMembershipDecided(params: {
       subject: `Approved: ${params.className}`,
       html: emailLayout({
         heading: "You're in!",
-        body: `Your request to join <strong>${params.className}</strong> was approved.`,
+        body: `Your request to join <strong>${esc(params.className)}</strong> was approved.`,
         cta: { label: "Open Thadar", url: link("/classes") },
       }),
     });
@@ -125,7 +125,7 @@ export async function onMembershipDecided(params: {
       subject: `Update on your request to join ${params.className}`,
       html: emailLayout({
         heading: "Request not approved",
-        body: `Your request to join <strong>${params.className}</strong> was declined. Reach out to your teacher if you think this is a mistake.`,
+        body: `Your request to join <strong>${esc(params.className)}</strong> was declined. Reach out to your teacher if you think this is a mistake.`,
       }),
     });
   }
@@ -165,7 +165,7 @@ export async function onAssignmentPosted(params: {
         subject: `New assignment in ${params.className}: ${params.title}`,
         html: emailLayout({
           heading: params.title,
-          body: `A new assignment was posted in <strong>${params.className}</strong>.`,
+          body: `A new assignment was posted in <strong>${esc(params.className)}</strong>.`,
           cta: { label: "View assignment", url: link("/classes") },
         }),
       });
@@ -200,7 +200,7 @@ export async function onSubmissionReceived(params: {
     subject: `New submission: ${params.assignmentTitle}`,
     html: emailLayout({
       heading: "New submission",
-      body: `<strong>${who}</strong> submitted <strong>${params.assignmentTitle}</strong> in ${params.className}.`,
+      body: `<strong>${esc(who)}</strong> submitted <strong>${esc(params.assignmentTitle)}</strong> in ${esc(params.className)}.`,
       cta: { label: "Review submission", url: link("/teacher/assignments") },
     }),
   });
@@ -226,7 +226,7 @@ export async function onGradeReturned(params: {
     subject: `Your grade for ${params.assignmentTitle}`,
     html: emailLayout({
       heading: `Grade: ${params.grade}`,
-      body: `Your submission for <strong>${params.assignmentTitle}</strong> has been graded.`,
+      body: `Your submission for <strong>${esc(params.assignmentTitle)}</strong> has been graded.`,
       cta: { label: "View feedback", url: link("/home") },
     }),
   });

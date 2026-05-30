@@ -61,7 +61,25 @@ export async function sendEmail(input: SendEmailInput): Promise<boolean> {
   }
 }
 
-/** Minimal branded HTML shell so every email looks consistent. */
+/**
+ * Escape untrusted text before interpolating into email HTML. Names, class
+ * titles, grades etc. are user-controlled and would otherwise allow HTML/script
+ * injection into the recipient's inbox.
+ */
+export function esc(s: string): string {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+/**
+ * Minimal branded HTML shell so every email looks consistent.
+ * `heading` is escaped here (always plain text). `body` is treated as trusted
+ * HTML — callers MUST wrap any user-controlled value with esc() before passing.
+ */
 export function emailLayout(opts: {
   heading: string;
   body: string;
@@ -73,7 +91,7 @@ export function emailLayout(opts: {
   return `<!doctype html><html><body style="margin:0;background:#0e0e10;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#e8e6e1">
   <div style="max-width:480px;margin:0 auto;padding:40px 28px">
     <div style="font-size:18px;font-weight:700;letter-spacing:-0.4px;margin-bottom:28px;color:#e8e6e1">Thadar</div>
-    <h1 style="font-size:22px;font-weight:600;letter-spacing:-0.4px;margin:0 0 14px;color:#e8e6e1">${opts.heading}</h1>
+    <h1 style="font-size:22px;font-weight:600;letter-spacing:-0.4px;margin:0 0 14px;color:#e8e6e1">${esc(opts.heading)}</h1>
     <div style="font-size:15px;line-height:1.6;color:#b7b4ad">${opts.body}</div>
     ${cta}
     <p style="margin:36px 0 0;font-size:12px;color:#6f6c66">Thadar — သဒ္ဒါ — generous, giving.</p>
